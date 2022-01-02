@@ -1,0 +1,16 @@
+.edit-daily-food-form-control{
+    width:800px;
+    padding:30px;
+}
+@media screen and (max-width: 1230px){
+    .edit-daily-food-form-control{
+        width:950px;
+        padding:30px;
+    }
+}
+@media screen and (max-width: 960px){
+    .edit-daily-food-form-control{
+        width:90%;
+        padding:30px;
+    }
+}

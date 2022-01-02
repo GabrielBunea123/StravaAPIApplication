@@ -1,0 +1,13 @@
+.profileImage{
+    border:1px solid gray;
+    border-radius:50% ;
+    height:200px;
+}
+
+@media screen and (max-width: 580px){
+    .profileImage{
+        height:50%;
+        width:50%;
+    }
+}
+

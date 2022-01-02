@@ -1,0 +1,82 @@
+html{
+    height:100%;
+
+}
+body {
+margin: 0;
+padding:0;
+font-family: "Butler", sans-serif;
+overflow-x:hidden;
+background-color: white;
+zoom: 100%;
+overflow-x: hidden; 
+
+min-height: 100%;
+
+position: relative;
+}
+p{
+    font-size:40px;
+}
+@media screen and (max-width: 700px) {
+    p{
+        font-size:35px;
+    }
+
+}
+@media screen and (max-width: 400px) {
+    p{
+        font-size:30px;
+    }
+
+}
+.all-container{
+    padding-bottom: 200px;
+}
+.color-pallete{
+    background-color:#00737B;
+    background-color:#008A8A;
+    background-color:#00ADAD;
+    background-color:#00C9C9;
+    background-color:#E9FBFB;
+}
+.home-profile-stats{
+    padding-right:20px;
+    
+}
+.home-profile-stats-kcal{
+    margin-left:20px;
+}
+.map-image{
+    text-align: center;
+    padding:10px;
+}
+.home-card{
+    text-align: center;
+}
+@media screen and (max-width: 1210px) {
+    .home-profile-stats-kcal{
+        display:none;
+    }
+}
+@media screen and (max-width: 991px) {
+    .home-profile-stats{
+        display: none;
+        
+    }
+    .home-activities-container{
+        float: center;
+    }
+}
+
+@media screen and (max-width: 790px) {
+    .map-image{
+        padding:10px;
+        width:100%;
+    }
+
+}
+
+
+
+

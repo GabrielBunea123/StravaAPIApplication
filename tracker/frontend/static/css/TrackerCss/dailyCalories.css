@@ -1,0 +1,7 @@
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color:  #E9FBFB;
+}
+.card{
+    padding-bottom: 0px;
+}
+
