@@ -46,25 +46,25 @@ const Sidebar = () => {
 
     return (
         <div>
-            <nav class="navbar navbar-expand-lg navbar-dark" style={{backgroundColor:"#00747B"}}>
+            <nav class="navbar navbar-expand-lg navbar-dark" style={{backgroundColor:"#008A8A"}}>
                 <div class={windowDimensions.width<=992?"container-fluid":"container-fluid container"}>
-                    <a class="navbar-brand item-nav-space" href="/">Dashboard</a>
+                    <a style={{fontWeight:"bold"}} class="navbar-brand item-nav-space" href="/">Dashboard</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item dropdown item-nav-space">
-                            <a class="nav-link navbar-brand dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a style={{fontWeight:"bold"}} class="nav-link navbar-brand dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Activities
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="/activities">My activities</a></li>
-                                <li><a class="dropdown-item" href="/create-activity">Create Activity</a></li>
+                                <li><a style={{fontWeight:"bold"}} class="dropdown-item" href="/activities">My activities</a></li>
+                                <li><a style={{fontWeight:"bold"}} class="dropdown-item" href="/create-activity">Create Activity</a></li>
                             </ul>
                         </li>
                         <li class="nav-item item-nav-space">
-                            <a class="nav-link navbar-brand active" href={`/daily-calories/${userInfo.id}/${currentDate}`}>Daily calories</a>
+                            <a style={{fontWeight:"bold"}} class="nav-link navbar-brand active" href={`/daily-calories/${userInfo.id}/${currentDate}`}>Daily calories</a>
                         </li>
                         
                     </ul>
@@ -72,13 +72,13 @@ const Sidebar = () => {
                     <form class="d-flex">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                             <li class="nav-item active item-nav-space">
-                                <a class="nav-link navbar-brand" href={`/profile`}><i class="far fa-user"></i> Profile</a>
+                                <a style={{fontWeight:"bold"}} class="nav-link navbar-brand" href={`/profile`}><i class="far fa-user"></i> Profile</a>
                             </li>
                             {/* <li class="nav-item active item-nav-space">
                                 <a class="nav-link navbar-brand" href={`/create-food/${userInfo.id}`}>New recipe</a>
                             </li> */}
                             <li class="nav-item active item-nav-space">
-                                <a href={`/set-kcal-goal/${userInfo.id}`} class="nav-link navbar-brand"><i class="fas fa-cog"></i></a>
+                                <a style={{fontWeight:"bold"}} href={`/set-kcal-goal/${userInfo.id}`} class="nav-link navbar-brand"><i class="fas fa-cog"></i></a>
                             </li>
                         </ul>
                     </form>
