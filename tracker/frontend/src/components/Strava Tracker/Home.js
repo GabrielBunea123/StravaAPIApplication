@@ -1,6 +1,10 @@
 import React,{useEffect,useState,useRef} from 'react'
 import {Typography,FormControl,Grid,Button} from '@material-ui/core'
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
+import HomeActivity from './HomeActivity'
+import { IterationsIcon } from '@primer/octicons-react';
+import HomeUserFollowers from './HomeUserFollowers'
+
 const Home = () => {
 
     const [activities,setActivities] = useState([])
@@ -63,47 +67,18 @@ const Home = () => {
                 {activities.length>0?
                     
                     activities.map((item, index) => (
-                    <a style={{textDecoration:"none",color:"black"}} href={`/activity-details/${item.id}`}>
-                        <div class="card home-card" style={{marginBottom:60,backgroundColor:"#f5f5f5",boxShadow:5,maxWidth:650}}>
-                            <div class="card-body">
-                                <h5 class="card-title">{item.name}</h5>
-                                <small>{item.start_date} {userInfo.city}, {userInfo.state}, {userInfo.country}</small>
-                                <div className="table-responsive">
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                            <th scope="col">Time</th>
-                                            <th scope="col">Max speed</th>
-                                            <th scope="col">Distance</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>{item.elapsed_time}</td>
-                                                <td>{item.max_speed} m/s</td>
-                                                <td>{item.distance} m</td>
-                                            </tr>
-                                        </tbody>
-                                        
-                                    </table>
-                                </div>
-                                {item.start_latlng.length>0?
-                                <img className="map-image" src={`https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/${item.start_latlng[1]},${item.start_latlng[0]},14/568x218?access_token=pk.eyJ1IjoiYnVuZWEiLCJhIjoiY2t4cWkxZW1xMDlhaDJvbXA3ajgxNjN3YiJ9.J0yOXHYvHos1LeiXnvjKhg`}></img>
-                                :<h4 style={{paddding:10,fontWeight:'bold',color:"#008A8A"}}>This workout doesn't have a map</h4>}
-                            </div>
-                        </div>
-                    </a>
-                    )):<Typography variant="h3">There are no activities</Typography>}
-                <div class="card text-center">
-                    <div class="card-header">
-                        Start now
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Record your first workout</h5>
-                        <div class="card-text">You can start by recording your first workout from the Strava mobile application or you can add it manually both in this application and Strava</div>
-                        <a style={{marginTop:10 ,backgroundColor:"#00ADAD",color:"white"}} href="/create-activity" class="btn">Add manually</a>
-                    </div>
-                </div>
+                        <HomeActivity 
+                            id={item.id} 
+                            name={item.name} 
+                            start_date={item.start_date} 
+                            city={userInfo.city} 
+                            state={userInfo.state} 
+                            country={userInfo.country} 
+                            elapsed_time={item.elapsed_time} 
+                            max_speed={item.max_speed} 
+                            distance={item.distance} 
+                            start_latlng={item.start_latlng}/>
+                    )):null}
             </div>
         )
     }
@@ -115,45 +90,53 @@ const Home = () => {
     return (
         <Grid spacing={1} className="all-container">
             <div className="container">
-                <h3 style={{paddingTop:30,paddingBottom:50,fontWeight:'bold',color:"#008A8A"}}>Activity feed</h3>
-                    <div className="d-flex">
-                        <div className="home-profile-stats">
-                            <div className="mr-auto p-2 profile-pic-container"><img className="profileImage" src={userInfo.profile}></img></div>
-                            <div style={{paddingTop:30}} className="d-flex flex-sm-row flex-column bd-highlight mb-3">
-                                <div class="card text-dark mb-3 stats-profile-container">
-                                    <div class="card-body">
-                                        <div className="d-flex flex-sm-row flex-column align-content-center">
-                                            <div class="d-flex flex-column bd-highlight mb-3 profile-recent-activities-followers">
-                                                <div className="mr-auto p-2">Followers</div>
-                                                <div className="mr-auto p-2">{userInfo.follower_count}</div>
-                                            </div>
-                                            <div class="d-flex flex-column bd-highlight mb-3 profile-recent-activities">
-                                                    <div className="mr-auto p-2">Activities</div>
-                                                    <div className="mr-auto p-2">{activities.length}</div>
-                                                </div>
-                                            <div class="d-flex flex-column bd-highlight mb-3 profile-recent-activities">
-                                                <div className="mr-auto p-2">Weight</div>
-                                                <div className="mr-auto p-2">{(Math.round(userInfo.weight * 100) / 100).toFixed(2)} kg</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                <div className="d-flex">
+                    <div className="mr-auto p-2 small-stats" style={{marginTop:10}}><img style={{width:70,borderRadius:"50%"}} src={userInfo.profile?userInfo.profile:"/static/images/UserDefault.png"}></img></div>
+                    <h3 className="small-stats" style={{paddingTop:30,paddingBottom:20,fontWeight:'bold',color:"#008A8A"}}>{userInfo.firstname} {userInfo.lastname}</h3>
+                </div>
+                <div style={{paddingTop:50}} className="d-flex flex-sm-row flex-column">
+                    <div className="home-profile-stats flex-column">
+                        <div className="mr-auto p-2 profile-pic-container"><img className="home-profileImage" src={userInfo.profile?userInfo.profile:"/static/images/UserDefault.png"}></img></div>
+                        <HomeUserFollowers userInfo={userInfo} activities={activities}/>
+                    </div>
+                    <div className="flex-column home-middle-column-container">
+                        <div class="card text-center">
+                            <div class="card-header">
+                                Start now
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Record your workout</h5>
+                                <div class="card-text">You can start by recording your first workout from the Strava mobile application or you can add it manually both in this application and Strava</div>
+                                <a style={{marginTop:10 ,backgroundColor:"#00ADAD",color:"white"}} href="/create-activity" class="btn">Add manually</a>
                             </div>
                         </div>
-                        {renderActivities()}
-                        <div style={{width:'100%'}} class="text-center home-profile-stats-kcal">
-                            <div class="card text-dark mb-3 stats-profile-container">
-                                <div class="card-body text-center">
-                                    <h4 style={{fontWeight:"bold"}}>Kcal goal</h4>
-                                    <h4 style={{color:"#008A8A",fontWeight:"bold"}}>{kcalGoal} kcal</h4>
-                                    <h4 style={{fontWeight:"bold"}}>Today's calories</h4>
-                                    <h4 style={{color:"#008A8A",fontWeight:"bold"}}>{totalKcal} kcal</h4>
-                                    <h4 style={{fontWeight:"bold"}}>Remaining calories</h4>
-                                    <h4 style={{color:"#008A8A",fontWeight:"bold"}}>{kcalGoal-totalKcal} kcal</h4>
+                        <div style={{marginTop:20}} class="card">
+                            <ul class="list-group list-group-flush">
+                                <li style={{textAlign:"center"}} class="list-group-item">Kcal Goal: {kcalGoal}</li>
+                                <li style={{textAlign:"center"}} class="list-group-item">Today's kcal: {totalKcal}</li>
+                                <li style={{textAlign:"center"}} class="list-group-item">Remaining kcal: {kcalGoal-totalKcal}</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <Grid item xs={12} align="center">
+                    <div className="flex-column" className="about-container">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 style={{fontWeight:"bold"}} class="card-title">About Eat&Track</h5>
+                                <div class="card-text">
+                                    This app was developed to help its users keep track of their workouts and daily food calories intake. 
+                                    The workouts can be recorded live using Strava or manually added from the app. 
+                                    All your Strava activities will appear in Eat&Track.
+                                    <br></br><br></br>
+                                    The daily calories tracker has a very large variety of food and if by any chance the food you are looking for is not in the list, you can create your own recipe.
                                 </div>
                             </div>
                         </div>
                     </div>
+                    </Grid>
+                </div>
+                <h3 style={{paddingTop:30,paddingBottom:50,fontWeight:'bold',color:"#008A8A"}}>Activity feed</h3>
+                {renderActivities()}
             </div>
             {/* <img style={{width:"100%"}} src={`https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/pin-s-a+9ed4bd(-122.46589,37.77343),pin-s-b+000(-122.42816,37.75965),path-5+f44-0.5(%7DrpeFxbnjVsFwdAvr@cHgFor@jEmAlFmEMwM_FuItCkOi@wc@bg@wBSgM)/auto/500x200?access_token=pk.eyJ1IjoiYnVuZWEiLCJhIjoiY2t4cWkxZW1xMDlhaDJvbXA3ajgxNjN3YiJ9.J0yOXHYvHos1LeiXnvjKhg`}></img> */}
         </Grid>

@@ -2,6 +2,7 @@ import React,{useState,useEffect} from 'react'
 import { Typography,TextField,Button,Grid,FormControl} from '@material-ui/core'
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { getInputUnstyledUtilityClass, getListItemSecondaryActionClassesUtilityClass } from '@mui/material';
+import RecentComponent from "./RecentComponent"
 
 const RecentFood = (props) => {
 
@@ -123,72 +124,7 @@ const RecentFood = (props) => {
             return(
                 <Grid item xs={12}>
                     {recentFoods.length>0?recentFoods.map((item)=>(
-                        <div className="card" style={{marginBottom:20,backgroundColor:"#00737B",borderRadius:30,padding:10,color:"white"}}>
-                            <div style={{marginTop:10}} class="d-flex justify-content-between">
-                                <div class="p-2">
-                                    <h5>{item.product_name.length>35?item.product_name:item.product_name}</h5>
-                                </div>
-                                <div class="p-2">
-                                    <h6>{item.grams} (g)</h6>
-                                </div>
-                                <div class="p-2">
-                                    <h6>{item.kcal} kcal</h6>
-                                </div>
-                                <div class="p-2">
-                                    <button onClick={()=>{setAddProductId(item.product_id);getMacros(item.product_id)}} type="button" class="btn" style={{backgroundColor:"#00ADAD",color:"white"}} data-bs-toggle="modal" data-bs-target="#exampleModal">+</button>
-
-                                    <div style={{color:"black"}} class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        {/* OPEN THE MODAL TO SET THE QUANTITY */}
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content">
-                                            <div class="modal-header">
-                                                <div className="table-responsive card">
-                                                    <table class="table table-striped">
-                                                        <thead>
-                                                            <tr>
-                                                                <th scope="col">Quantity</th>
-                                                                <th scope="col">Total kcal</th>
-                                                                <th scope="col">Total proteins</th>
-                                                                <th scope="col">Total carbs</th>
-                                                                <th scope="col">Total fats</th>
-                                                                <th scope="col">Total sugar</th>
-                                                                <th scope="col">Total fibers</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>{macrosDetails.length>0?macrosDetails[0].quantity:null} (g)</td>
-                                                                <td>{macrosDetails.length>0?macrosDetails[0].kcal:null}</td>
-                                                                <td>{macrosDetails.length>0?macrosDetails[0].proteins:null} (g)</td>
-                                                                <td>{macrosDetails.length>0?macrosDetails[0].carbs:null} (g)</td>
-                                                                <td>{macrosDetails.length>0?macrosDetails[0].fats:null} (g)</td>
-                                                                <td>{macrosDetails.length>0?macrosDetails[0].sugars:null} (g)</td>
-                                                                <td>{macrosDetails.length>0?macrosDetails[0].fibers:null} (g)</td>
-                                                            </tr>
-                                                        </tbody>
-                                                        
-                                                        
-                                                    </table>
-                                                </div>
-                                            </div>
-                                            <div class="modal-body">
-                                                <h5 class="modal-title" id="exampleModalLabel">Set the quantity of the food</h5>
-                                                <div class="mb-3">
-                                                    <label for="exampleInputEmail1" class="form-label">Grams</label>
-                                                    <input onChange={handleQuantityChange} placeHolder="Quantity (g)" type="number" class="form-control"></input>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                <a href={`/daily-calories/${user_id}/${currentDate}`} onClick={()=>{addDailyFood()}} type="button" class="btn" style={{backgroundColor:"#00ADAD",color:"white"}}>+ Add</a>
-                                            </div>
-                                            </div>
-                                        </div>
-                                        {/* END THE MODAL */}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <RecentComponent product={item.product_name} quantity={item.quantity} kcal={item.kcal} user_id={user_id} product_id={item.product_id} setAddProductId={setAddProductId} getMacros={getMacros} macrosDetails={macrosDetails} handleQuantityChange={handleQuantityChange} currentDate={currentDate} addDailyFood={addDailyFood}/>
                     )):<Grid item xs={12} align="center"><Typography style={{color:"gray"}} variant="h3">There are no recent products</Typography></Grid>}
                 </Grid>
             )
@@ -198,73 +134,7 @@ const RecentFood = (props) => {
                 return(
                     <Grid item xs={12}>
                         {outsideSearch.length>0?outsideSearch.map((item)=>(
-                            
-                            <div className="card" style={{marginBottom:20,backgroundColor:"#00737B",borderRadius:30,padding:10,color:"white"}}>
-                                <div style={{marginTop:10}} class="d-flex justify-content-between">
-                                    <div class="p-2">
-                                        <h5>{item.product.length>35?item.product:item.product}</h5>
-                                    </div>
-                                    <div class="p-2">
-                                        <h6>{item.quantity} (g)</h6>
-                                    </div>
-                                    <div class="p-2">
-                                        <h6>{item.kcal} kcal</h6>
-                                    </div>
-                                    <div class="p-2">
-                                        <button onClick={()=>{setAddProductId(item.product_id);getMacros(item.product_id)}} type="button" class="btn" style={{backgroundColor:"#00ADAD",color:"white"}} data-bs-toggle="modal" data-bs-target="#exampleModal">+</button>
-
-                                        <div style={{color:"black"}} class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                            {/* OPEN THE MODAL TO SET THE QUANTITY */}
-                                            <div class="modal-dialog modal-dialog-centered">
-                                                <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <div className="table-responsive card">
-                                                        <table class="table table-striped">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th scope="col">Quantity</th>
-                                                                    <th scope="col">Total kcal</th>
-                                                                    <th scope="col">Total proteins</th>
-                                                                    <th scope="col">Total carbs</th>
-                                                                    <th scope="col">Total fats</th>
-                                                                    <th scope="col">Total sugar</th>
-                                                                    <th scope="col">Total fibers</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td>{macrosDetails.length>0?macrosDetails[0].quantity:null} (g)</td>
-                                                                    <td>{macrosDetails.length>0?macrosDetails[0].kcal:null}</td>
-                                                                    <td>{macrosDetails.length>0?macrosDetails[0].proteins:null} (g)</td>
-                                                                    <td>{macrosDetails.length>0?macrosDetails[0].carbs:null} (g)</td>
-                                                                    <td>{macrosDetails.length>0?macrosDetails[0].fats:null} (g)</td>
-                                                                    <td>{macrosDetails.length>0?macrosDetails[0].sugars:null} (g)</td>
-                                                                    <td>{macrosDetails.length>0?macrosDetails[0].fibers:null} (g)</td>
-                                                                </tr>
-                                                            </tbody>
-                                                            
-                                                            
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div class="mb-3">
-                                                        <h5 class="modal-title" id="exampleModalLabel">Set the quantity of the food</h5>
-                                                        <label for="exampleInputEmail1" class="form-label">Grams</label>
-                                                        <input onChange={handleQuantityChange} placeHolder="Quantity (g)" type="number" class="form-control"></input>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                    <a href={`/daily-calories/${user_id}/${currentDate}`} onClick={()=>{addDailyFood()}} type="button" class="btn" style={{backgroundColor:"#00ADAD",color:"white"}}>+ Add</a>
-                                                </div>
-                                                </div>
-                                            </div>
-                                            {/* END OF THE MODAL */}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <RecentComponent product={item.product} quantity={item.quantity} kcal={item.kcal} user_id={user_id} product_id={item.product_id} setAddProductId={setAddProductId} getMacros={getMacros} macrosDetails={macrosDetails} handleQuantityChange={handleQuantityChange} currentDate={currentDate} addDailyFood={addDailyFood}/>
                         )):<Grid item xs={12} align="center"><Typography style={{color:"gray"}} variant="h3">There are no recent products</Typography></Grid>}
                     </Grid>
                 )
@@ -274,72 +144,7 @@ const RecentFood = (props) => {
                     <Grid item xs={12}>
                         {searchedInRecent.length>0?searchedInRecent.map((item)=>(
                             
-                                <div className="card" style={{marginBottom:20,backgroundColor:"#00737B",borderRadius:30,padding:10,color:"white"}}>
-                                    <div style={{marginTop:10}} class="d-flex justify-content-between">
-                                        <div class="p-2">
-                                            <h5>{item.product_name.length>35?item.product_name:item.product_name}</h5>
-                                        </div>
-                                        <div class="p-2">
-                                            <h6>{item.grams} (g)</h6>
-                                        </div>
-                                        <div class="p-2">
-                                            <h6>{item.kcal} kcal</h6>
-                                        </div>
-                                        {/* OPEN THE MODAL TO SET THE QUANTITY */}
-                                        <div class="p-2">
-                                            <button onClick={()=>{setAddProductId(item.product_id);getMacros(item.product_id)}} type="button" class="btn" style={{backgroundColor:"#00ADAD",color:"white"}} data-bs-toggle="modal" data-bs-target="#exampleModal">+</button>
-
-                                            <div style={{color:"black"}} class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-centered">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <div className="table-responsive card">
-                                                                <table class="table table-striped">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th scope="col">Quantity</th>
-                                                                            <th scope="col">Total kcal</th>
-                                                                            <th scope="col">Total proteins</th>
-                                                                            <th scope="col">Total carbs</th>
-                                                                            <th scope="col">Total fats</th>
-                                                                            <th scope="col">Total sugar</th>
-                                                                            <th scope="col">Total fibers</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        <tr>
-                                                                            <td>{macrosDetails.length>0?macrosDetails[0].quantity:null} (g)</td>
-                                                                            <td>{macrosDetails.length>0?macrosDetails[0].kcal:null}</td>
-                                                                            <td>{macrosDetails.length>0?macrosDetails[0].proteins:null} (g)</td>
-                                                                            <td>{macrosDetails.length>0?macrosDetails[0].carbs:null} (g)</td>
-                                                                            <td>{macrosDetails.length>0?macrosDetails[0].fats:null} (g)</td>
-                                                                            <td>{macrosDetails.length>0?macrosDetails[0].sugars:null} (g)</td>
-                                                                            <td>{macrosDetails.length>0?macrosDetails[0].fibers:null} (g)</td>
-                                                                        </tr>
-                                                                    </tbody>
-                                                                    
-                                                                    
-                                                                </table>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div class="mb-3">
-                                                                <h5 class="modal-title" id="exampleModalLabel">Set the quantity of the food</h5>
-                                                                <label for="exampleInputEmail1" class="form-label">Grams</label>
-                                                                <input onChange={handleQuantityChange} placeHolder="Quantity (g)" type="number" class="form-control"></input>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                            <a href={`/daily-calories/${user_id}/${currentDate}`} onClick={()=>{addDailyFood()}} type="button" class="btn" style={{backgroundColor:"#00ADAD",color:"white"}}>+ Add</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        {/* MODAL END */}
-                                    </div>
-                                </div>
+                            <RecentComponent product={item.product_name} quantity={item.quantity} kcal={item.kcal} user_id={user_id} product_id={item.product_id} setAddProductId={setAddProductId} getMacros={getMacros} macrosDetails={macrosDetails} handleQuantityChange={handleQuantityChange} currentDate={currentDate} addDailyFood={addDailyFood}/>
                         )):<Grid item xs={12} align="center"><Typography style={{color:"gray"}} variant="h3">There are no recent products</Typography></Grid>}
                     </Grid>
                 )

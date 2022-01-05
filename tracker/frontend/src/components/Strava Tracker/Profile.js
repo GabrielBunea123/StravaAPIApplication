@@ -123,7 +123,7 @@ const Profile = () => {
         getStravaActivities()
     },[])
     return (
-        <Grid container spacing={1} style={{paddingTop:30,paddingBottom:30}} className="all-container">
+        <Grid container spacing={1} style={{paddingTop:30}} className="all-container">
             <div className="container" style={{padding:20}}>
                 <Grid item xs={12} align="center">
                     {/* FOLLOWERS AND STATS */}

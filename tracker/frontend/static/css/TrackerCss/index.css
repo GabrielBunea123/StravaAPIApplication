@@ -31,7 +31,7 @@ p{
 
 }
 .all-container{
-    padding-bottom: 200px;
+    padding-bottom: 500px;
 }
 .color-pallete{
     background-color:#00737B;
@@ -42,6 +42,7 @@ p{
 }
 .home-profile-stats{
     padding-right:20px;
+    text-align: center;
     
 }
 .home-profile-stats-kcal{
@@ -51,24 +52,77 @@ p{
     text-align: center;
     padding:10px;
 }
-.home-card{
-    text-align: center;
+.home-middle-column-container{
+    width:100%;
 }
-@media screen and (max-width: 1210px) {
-    .home-profile-stats-kcal{
-        display:none;
+.about-container{
+    width:100%;
+    padding-left:20px;
+}
+.home-followers-stats{
+    margin:10px;
+}
+.h5-followers{
+    font-weight: bold;
+}
+.home-profileImage{
+    border:1px solid gray;
+    border-radius:50% ;
+    height:200px;
+}
+.small-stats{
+    display: none;
+}
+@media screen and (max-width: 992px) {
+    .home-profileImage{
+        height:30%;
+        width:30%;
     }
-}
-@media screen and (max-width: 991px) {
+    .home-middle-column-container{
+        width:100%;
+    }
+    .about-container{
+        width:100%;
+    }
     .home-profile-stats{
-        display: none;
+        width:100%;
+        display:none;
         
     }
-    .home-activities-container{
-        float: center;
+    .small-stats{
+        display:flex;
+    }
+
+}
+@media screen and (max-width: 580px){
+    .home-profileImage{
+        height:30%;
+        width:30%;
     }
 }
+@media screen and (max-width: 575px) {
+    .home-middle-column-container{
+        padding-bottom:50px;
+    }
+    .about-container{
+        padding-left:0px;
+    }
+    .home-followers-stats{
+        margin:2px;
+    }
+    .home-profile-stats{
+        padding:0;
+        display:block;
+        
+    }
+    .h5-followers{
+        font-size:4vw;
+    }
+    .small-stats{
+        display: none;
+    }
 
+}
 @media screen and (max-width: 790px) {
     .map-image{
         padding:10px;
@@ -76,6 +130,7 @@ p{
     }
 
 }
+
 
 
 
