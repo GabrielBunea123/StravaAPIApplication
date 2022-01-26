@@ -34,11 +34,11 @@ const ActivityDetails = (props) => {
             var date = new Date(data.start_date)
             data.start_date = date.toLocaleString();
             
-            if(data.map.polyline){
+            if(data.polyline){
 
                 setHasMap(true)
                 //map setup
-                var coordinates = L.Polyline.fromEncoded(data.map.polyline).getLatLngs(); //decoding the polyline
+                var coordinates = L.Polyline.fromEncoded(data.polyline).getLatLngs(); //decoding the polyline
                 coordinates.map((item)=>{
                     mapCoordinates.push([item.lng,item.lat])//adding the coordinates to a list
                 })
@@ -117,7 +117,7 @@ const ActivityDetails = (props) => {
                 <div class="card">
                     <div class="card-body">
                         <div className="d-flex flex-sm-row flex-column">
-                            <div className="mr-auto p-2 profile-pic-container"><img className="profileImage" src={userInfo.profile}></img></div>
+                            <div className="mr-auto p-2 profile-pic-container"><img className="profileImage" src={userInfo.profile_pic}></img></div>
                             <div style={{paddingTop:30}} className="d-flex flex-column bd-highlight mb-3">
                                 <div class="text-dark mb-3">
                                     <h3>{activity?activity.name:null}</h3>
@@ -150,7 +150,7 @@ const ActivityDetails = (props) => {
                                             </thead>
                                             <thead>
                                                 <tr>
-                                                    <th scope="col"><Typography variant="h6">{activity?activity.type:null}</Typography></th>
+                                                    <th scope="col"><Typography variant="h6">{activity?activity.activity_type:null}</Typography></th>
                                                     <th scope="col"><Typography variant="h6">{activity?activity.distance:null} m</Typography></th>
                                                     <th scope="col"><Typography variant="h6">{activity?activity.elapsed_time:null}</Typography></th>
                                                     <th scope="col"><Typography variant="h6">{activity?activity.average_speed:null} m/s</Typography></th>

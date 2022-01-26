@@ -155,7 +155,7 @@ const Activities = (props) => {
     const [activities,setActivities] = useState([])
     const [filteredActivities,setFilteredActivities] = useState([])
     const [filterName,setFilterName] = useState('')
-    const [filterType,setFilterType] = useState('')
+    const [filterType,setFilterType] = useState('none')
     const [filterBool,setFilterBool] = useState(false)
     const [stravaAuthenticated,setStravaAuthenticated] = useState(false)
 
@@ -178,6 +178,7 @@ const Activities = (props) => {
         fetch("/strava/get-strava-activities")
         .then((res)=>res.json())
         .then((data)=>{
+            console.log(data)
             data.map((item)=>{
                 //from ISO 8601 format to normal format date
                 var date = new Date(item.start_date)
@@ -206,7 +207,7 @@ const Activities = (props) => {
         else if(filterName.length==0 && filterType!='none'){//filter only by type
             setFilteredActivities([]);
             activities.map((item,index)=>{
-                if(item.type.toLocaleLowerCase().includes(filterType.toLocaleLowerCase())){
+                if(item.activity_type.toLocaleLowerCase().includes(filterType.toLocaleLowerCase())){
                     setFilteredActivities(filteredActivities => [...filteredActivities, item]);
                     setFilterBool(true)
                 }
@@ -215,7 +216,7 @@ const Activities = (props) => {
         else if(filterName.length>0 && filterType!='none'){//filter both by name and by type
             setFilteredActivities([]);
             activities.map((item,index)=>{
-                if(item.type.toLocaleLowerCase().includes(filterType.toLocaleLowerCase()) && item.name.toLocaleLowerCase().includes(filterName.toLocaleLowerCase())){
+                if(item.activity_type.toLocaleLowerCase().includes(filterType.toLocaleLowerCase()) && item.name.toLocaleLowerCase().includes(filterName.toLocaleLowerCase())){
                     setFilteredActivities(filteredActivities => [...filteredActivities, item]);
                     setFilterBool(true)
                 }
@@ -251,9 +252,9 @@ const Activities = (props) => {
                         {activities.length>0? activities.map((item, index) => (
                             <tr>
                                 <th scope="col">{index+1}</th>
-                                <td>{item.type}</td>
-                                <td><a style={{color:"#00ADAD"}} href={`/activity-details/${item.id}`}>{item.name}</a></td>
-                                <td>{item.start_date}</td>
+                                <td>{item.activity_type}</td>
+                                <td><a style={{color:"#00ADAD"}} href={`/activity-details/${item.activity_id}`}>{item.name}</a></td>
+                                <td>{item.start_date_local.slice(0,10)}</td>
                                 <th>{item.elapsed_time}</th>
                             </tr>
                             )):<Typography variant="h3">There are no activities</Typography>}
@@ -279,9 +280,9 @@ const Activities = (props) => {
                         {filteredActivities.length>0? filteredActivities.map((item, index) => (
                             <tr>
                                 <th scope="col">{index+1}</th>
-                                <td>{item.type}</td>
-                                <td><a style={{color:"#00ADAD"}} href={`/activity-details/${item.id}`}>{item.name}</a></td>
-                                <td>{item.start_date}</td>
+                                <td>{item.activity_type}</td>
+                                <td><a style={{color:"#00ADAD"}} href={`/activity-details/${item.activity_id}`}>{item.name}</a></td>
+                                <td>{item.start_date_local.slice(0,10)}</td>
                                 <th>{item.elapsed_time}</th>
                             </tr>
                             )):<Typography variant="h3">There are no activities</Typography>}

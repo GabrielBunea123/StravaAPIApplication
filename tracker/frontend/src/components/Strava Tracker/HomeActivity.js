@@ -1,9 +1,31 @@
-import React from 'react'
+import React,{useEffect, useState} from 'react'
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 
 const HomeActivity = (props) => {
+
+    const [mapCoordinates,setMapCoordinates] = useState([])
+
+    const decodePolyline = () => {
+        if(props.polyline){
+            var coordinates = L.Polyline.fromEncoded(props.polyline).getLatLngs(); //decoding the polyline
+            return(
+                <img className="map-image" style={{width:"100%"}} src={`https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/${coordinates[0].lng},${coordinates[0].lat},14/1200x300?access_token=pk.eyJ1IjoiYnVuZWEiLCJhIjoiY2t4cWkxZW1xMDlhaDJvbXA3ajgxNjN3YiJ9.J0yOXHYvHos1LeiXnvjKhg`}></img>
+            )
+            console.log(coordinates[0].lat)
+            // coordinates.map((item)=>{
+            //     mapCoordinates.push([item.lng,item.lat])//adding the coordinates to a list
+            // })
+        }
+        
+    }
+
+    useEffect(()=>{
+        decodePolyline();
+    },[])
+
+
     return (
-        <a style={{textDecoration:"none",color:"black"}} href={`/activity-details/${props.id}`}>
+        <a style={{textDecoration:"none",color:"black"}} href={`/activity-details/${props.activity_id}`}>
             <div class="card home-card" style={{marginBottom:60,backgroundColor:"#f5f5f5",boxShadow:5}}>
                 <div class="card-body">
                     <h3 style={{fontWeight:"bold"}} class="card-title">{props.name} <FitnessCenterIcon/></h3>
@@ -27,9 +49,10 @@ const HomeActivity = (props) => {
                             
                         </table>
                     </div>
-                    {props.start_latlng.length>0?
-                    <img className="map-image" style={{width:"100%"}} src={`https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/${props.start_latlng[1]},${props.start_latlng[0]},14/1200x300?access_token=pk.eyJ1IjoiYnVuZWEiLCJhIjoiY2t4cWkxZW1xMDlhaDJvbXA3ajgxNjN3YiJ9.J0yOXHYvHos1LeiXnvjKhg`}></img>
-                    :<h4 style={{paddding:10,fontWeight:'bold',color:"#008A8A"}}>This workout has no map</h4>}
+                    {decodePolyline()}
+                    {/* {mapCoordinates.length?
+                    <img className="map-image" style={{width:"100%"}} src={`https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/${mapCoordinates[0].lat},${mapCoordinates[0].lng},14/1200x300?access_token=pk.eyJ1IjoiYnVuZWEiLCJhIjoiY2t4cWkxZW1xMDlhaDJvbXA3ajgxNjN3YiJ9.J0yOXHYvHos1LeiXnvjKhg`}></img>
+                    :<h4 style={{paddding:10,fontWeight:'bold',color:"#008A8A"}}>This workout has no map</h4>} */}
                 </div>
             </div>
         </a>

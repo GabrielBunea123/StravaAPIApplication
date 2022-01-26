@@ -4,3 +4,4 @@ from .models import *
 admin.site.register(StravaToken)
 admin.site.register(UserDetails)
 admin.site.register(Activity)
+admin.site.register(UserStats)

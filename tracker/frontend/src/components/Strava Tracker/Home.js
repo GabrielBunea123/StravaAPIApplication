@@ -7,12 +7,28 @@ import HomeUserFollowers from './HomeUserFollowers'
 
 const Home = () => {
 
+    const [stravaAuthenticated,setStravaAuthenticated]= useState(false)
     const [activities,setActivities] = useState([])
     const [userInfo,setUserInfo] = useState([])
     const [stravaActivity,setStravaActivity] = useState([])
     const [totalKcal,setTotalKcal] = useState(0)
     const currentDate=new Date().toISOString().slice(0,10);
     const kcalGoal = localStorage.getItem("kcalGoal")
+
+    function authenticateStrava(){
+        fetch('/strava/is_authenticated')
+        .then((res)=>res.json())
+        .then((data)=>{
+            setStravaAuthenticated(data.status)
+            if(!data.status){
+                fetch("/strava/get-auth-url")
+                .then((res)=>res.json())
+                .then((data)=>{
+                    window.location.replace(data.url)//redirect to the strava url
+                })
+            }
+        })
+    }
 
     function UserDetails(){
         fetch("/strava/authenticated-user")
@@ -68,7 +84,7 @@ const Home = () => {
                     
                     activities.map((item, index) => (
                         <HomeActivity 
-                            id={item.id} 
+                            activity_id={item.activity_id} 
                             name={item.name} 
                             start_date={item.start_date} 
                             city={userInfo.city} 
@@ -77,13 +93,15 @@ const Home = () => {
                             elapsed_time={item.elapsed_time} 
                             max_speed={item.max_speed} 
                             distance={item.distance} 
-                            start_latlng={item.start_latlng}/>
+                            polyline = {item.polyline}
+                            />
                     )):null}
             </div>
         )
     }
 
     useEffect(()=>{
+        authenticateStrava()
         getStravaActivities();
         UserDetails()
     },[])
@@ -91,7 +109,7 @@ const Home = () => {
         <Grid spacing={1} className="all-container">
             <div className="container">
                 <div className="d-flex">
-                    <div className="mr-auto p-2 small-stats" style={{marginTop:10}}><img style={{width:70,borderRadius:"50%"}} src={userInfo.profile?userInfo.profile:"/static/images/UserDefault.png"}></img></div>
+                    <div className="mr-auto p-2 small-stats" style={{marginTop:10}}><img style={{width:70,borderRadius:"50%"}} src={userInfo.profile_pic?userInfo.profile_pic:"/static/images/UserDefault.png"}></img></div>
                     <h3 className="small-stats" style={{paddingTop:30,paddingBottom:20,fontWeight:'bold',color:"#008A8A"}}>{userInfo.firstname} {userInfo.lastname}</h3>
                 </div>
                 <div style={{paddingTop:50}} className="d-flex flex-sm-row flex-column">

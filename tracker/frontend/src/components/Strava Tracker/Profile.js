@@ -46,6 +46,7 @@ const Profile = () => {
         fetch("/strava/authenticated-user")
         .then((res)=>res.json())
         .then((data)=>{
+            console.log(data)
             setUserInfo(data)
         })
     }
@@ -53,6 +54,7 @@ const Profile = () => {
         fetch("/strava/user-stats")
         .then((res)=>res.json())
         .then((data)=>{
+            console.log(data)
             setUserStats(data)
             // setting the running time
             var runningTimeDate = new Date(null);
@@ -128,7 +130,7 @@ const Profile = () => {
                 <Grid item xs={12} align="center">
                     {/* FOLLOWERS AND STATS */}
                     <div className="d-flex flex-sm-row flex-column">
-                        <div className="mr-auto p-2 profile-pic-container"><img className="profileImage" src={userInfo.profile}></img></div>
+                        <div className="mr-auto p-2 profile-pic-container"><img className="profileImage" src={userInfo.profile_pic}></img></div>
                         <div style={{paddingTop:30}} className="d-flex flex-column bd-highlight mb-3">
                             <div class="card text-dark mb-3 stats-profile-container">
                                 <div class="card-body">

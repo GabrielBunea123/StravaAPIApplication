@@ -12,21 +12,41 @@ class StravaToken(models.Model):
 class UserDetails(models.Model):
     user_id = models.IntegerField()
     username = models.CharField(max_length=200,blank=True,null=True)
-    first_name = models.CharField(max_length=200,blank=True,null=True)
-    last_name = models.CharField(max_length=200,blank=True,null=True)
+    firstname = models.CharField(max_length=200,blank=True,null=True)
+    lastname = models.CharField(max_length=200,blank=True,null=True)
     city = models.CharField(max_length=200,blank=True,null=True)
     country = models.CharField(max_length=200,blank=True,null=True)
     sex = models.CharField(max_length=200,blank=True,null=True)
     premium_account = models.BooleanField(default=False,blank=True,null=True)
     profile_pic = models.CharField(max_length=200,null=True,blank=True)
-    weight = models.FloatField()
+    weight = models.FloatField(null=True,blank=True)
+
+class UserStats(models.Model):
+
+    user_id = models.CharField(max_length=200,blank=True,null=True)
+
+    all_run_totals_count = models.IntegerField(blank=True,null=True)
+    all_run_totals_distance = models.IntegerField(blank=True,null=True)
+    all_run_totals_moving_time = models.IntegerField(blank=True,null=True)
+
+    all_ride_totals_count = models.IntegerField(blank=True,null=True)
+    all_ride_totals_distance = models.IntegerField(blank=True,null=True)
+    all_ride_totals_moving_time = models.IntegerField(blank=True,null=True)
+
+    all_swim_totals_count = models.IntegerField(blank=True,null=True)
+    all_swim_totals_distance = models.IntegerField(blank=True,null=True)
+    all_swim_totals_moving_time = models.IntegerField(blank=True,null=True)
+
+    biggest_ride_distance = models.IntegerField(blank=True,null=True)
+
+
 class Activity(models.Model):
-    user_key = models.CharField(max_length=50)
-    activity_id = models.IntegerField()
+    user_id = models.CharField(max_length=200,blank=True,null=True)
+    activity_id = models.IntegerField(blank=True,null=True)
     name = models.CharField(max_length=200,blank=True)
-    activity_type = models.CharField(max_length=200,blank=True)
-    start_date_local = models.DateTimeField(auto_now_add=True)
-    elapsed_time = models.IntegerField()
-    description = models.CharField(max_length=200)
-    distance = models.IntegerField()
+    activity_type = models.CharField(max_length=200,blank=True,null=True)
+    start_date_local = models.DateTimeField(auto_now_add=True,blank=True,null=True)
+    elapsed_time = models.IntegerField(blank=True,null=True)
+    distance = models.IntegerField(blank=True,null=True)
+    polyline = models.CharField(max_length=10000000000000000000000000,blank=True,null=True)
     
