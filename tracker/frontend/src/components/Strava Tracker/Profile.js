@@ -58,32 +58,32 @@ const Profile = () => {
             setUserStats(data)
             // setting the running time
             var runningTimeDate = new Date(null);
-            runningTimeDate.setSeconds(data.all_run_totals.elapsed_time); // specify value for SECONDS here
+            runningTimeDate.setSeconds(data.all_run_totals_moving_time); // specify value for SECONDS here
             setAllRunningTime(runningTimeDate.toISOString().substr(11, 8))
 
             //setting the moving time run
             var movingRunningTimeDate = new Date(null);
-            movingRunningTimeDate.setSeconds(data.all_run_totals.moving_time); // specify value for SECONDS here
+            movingRunningTimeDate.setSeconds(data.all_run_totals_moving_time); // specify value for SECONDS here
             setAllMovingTime(movingRunningTimeDate.toISOString().substr(11, 8))
 
             // setting the riding time
             var ridingTimeDate = new Date(null);
-            ridingTimeDate.setSeconds(data.all_ride_totals.elapsed_time); // specify value for SECONDS here
+            ridingTimeDate.setSeconds(data.all_ride_totals_moving_time); // specify value for SECONDS here
             setAllRidingTime(ridingTimeDate.toISOString().substr(11, 8))
 
             //setting the moving time ride
             var movingRidingTimeDate = new Date(null);
-            movingRidingTimeDate.setSeconds(data.all_ride_totals.moving_time); // specify value for SECONDS here
+            movingRidingTimeDate.setSeconds(data.all_ride_totals_moving_time); // specify value for SECONDS here
             setAllMovingRidingTime(movingRidingTimeDate.toISOString().substr(11, 8))
 
             // setting the swimming time
             var swimmingTimeDate = new Date(null);
-            swimmingTimeDate.setSeconds(data.all_swim_totals.elapsed_time); // specify value for SECONDS here
+            swimmingTimeDate.setSeconds(data.all_swim_totals_moving_time); // specify value for SECONDS here
             setAllSwimmingTime(swimmingTimeDate.toISOString().substr(11, 8))
 
             //setting the moving time swim
             var movingSwimmingTimeDate = new Date(null);
-            movingSwimmingTimeDate.setSeconds(data.all_swim_totals.moving_time); // specify value for SECONDS here
+            movingSwimmingTimeDate.setSeconds(data.all_swim_totals_moving_time); // specify value for SECONDS here
             setAllMovingSwimmingTime(movingSwimmingTimeDate.toISOString().substr(11, 8))
 
         })
@@ -100,16 +100,16 @@ const Profile = () => {
             <Card style={{backgroundColor:"#75C42E",padding:10,height:500}}>
                 <Typography variant="h4">Stats</Typography>
                 <CardContent>
-                {userStats.all_run_totals?
+                {userStats.all_run_totals_count?
                     <div>
                         <Typography variant="h6">Biggest ride distance: {userStats.biggest_ride_distance} m</Typography>
-                        <Typography variant="h6">Number of rides: {userStats.all_ride_totals.count}</Typography>
-                        <Typography variant="h6">All rides distance: {userStats.all_ride_totals.distance}</Typography>
-                        <Typography variant="h6">All rides time: {userStats.all_ride_totals.elapsed_time}</Typography>
+                        <Typography variant="h6">Number of rides: {userStats.all_ride_totals_count}</Typography>
+                        <Typography variant="h6">All rides distance: {userStats.all_ride_totals_distance}</Typography>
+                        <Typography variant="h6">All rides time: {userStats.all_ride_totals_moving_time}</Typography>
                         <br></br>
                         <Typography variant="h6">Number of runs: {userStats.all_run_totals.count}</Typography>
                         <Typography variant="h6">All runs distance: {userStats.all_run_totals.distance}</Typography>
-                        <Typography variant="h6">All runs time: {userStats.all_run_totals.elapsed_time}</Typography>
+                        <Typography variant="h6">All runs time: {userStats.all_run_totals_moving_time}</Typography>
                     </div>
                 :null}
                 </CardContent>
@@ -219,7 +219,7 @@ const Profile = () => {
                                             <Typography variant="h6">Total run distance</Typography>
                                         </div>
                                         <div class="ms-auto p-2 bd-highlight">
-                                            <Typography variant="h6">{userStats.all_run_totals?`${userStats.all_run_totals.distance} m`: "0 m"}</Typography>
+                                            <Typography variant="h6">{userStats.all_run_totals_distance?`${userStats.all_run_totals_distance} m`: "0 m"}</Typography>
                                         </div>
                                     </div>
                                     <div class="d-flex bd-highlight mb-3">
@@ -227,7 +227,7 @@ const Profile = () => {
                                             <Typography variant="h6">Total ride distance</Typography>
                                         </div>
                                         <div class="ms-auto p-2 bd-highlight">
-                                            <Typography variant="h6">{userStats.all_ride_totals?`${userStats.all_ride_totals.distance} m`: "0 m"}</Typography>
+                                            <Typography variant="h6">{userStats.all_ride_totals_distance?`${userStats.all_ride_totals_distance} m`: "0 m"}</Typography>
                                         </div>
                                     </div>
                                     <div class="d-flex bd-highlight mb-3">
@@ -235,7 +235,7 @@ const Profile = () => {
                                             <Typography variant="h6">Total swim distance</Typography>
                                         </div>
                                         <div class="ms-auto p-2 bd-highlight">
-                                            <Typography variant="h6">{userStats.all_swim_totals?`${userStats.all_swim_totals.distance} m`: "0 m"}</Typography>
+                                            <Typography variant="h6">{userStats.all_swim_totals_distance?`${userStats.all_swim_totals_distance} m`: "0 m"}</Typography>
                                         </div>
                                     </div>
                                     <a href="/activities" class="btn" style={{backgroundColor:"#00ADAD",color:"white"}}>Activities</a>
@@ -251,7 +251,7 @@ const Profile = () => {
                                         <Typography variant="h6">Total run distance</Typography>
                                     </div>
                                     <div class="ms-auto p-2 bd-highlight">
-                                        <Typography variant="h6">{userStats.all_run_totals?`${userStats.all_run_totals.distance} m`: "0 m"}</Typography>
+                                        <Typography variant="h6">{userStats.all_run_totals_distance?`${userStats.all_run_totals_distance} m`: "0 m"}</Typography>
                                     </div>
                                 </div>
                                 <div class="d-flex bd-highlight mb-3">
@@ -259,7 +259,7 @@ const Profile = () => {
                                         <Typography variant="h6">Number of runs</Typography>
                                     </div>
                                     <div class="ms-auto p-2 bd-highlight">
-                                        <Typography variant="h6">{userStats.all_run_totals?`${userStats.all_run_totals.count}`: "0"}</Typography>
+                                        <Typography variant="h6">{userStats.all_run_totals_count?`${userStats.all_run_totals_count}`: "0"}</Typography>
                                     </div>
                                 </div>
                                 <div class="d-flex bd-highlight mb-3">
@@ -267,7 +267,7 @@ const Profile = () => {
                                         <Typography variant="h6">All running time</Typography>
                                     </div>
                                     <div class="ms-auto p-2 bd-highlight">
-                                        <Typography variant="h6">{userStats.all_run_totals?allRunningTime: "0 s"}</Typography>
+                                        <Typography variant="h6">{userStats.all_run_totals_moving_time?allRunningTime: "0 s"}</Typography>
                                     </div>
                                 </div>
                                 <div class="d-flex bd-highlight mb-3">
@@ -275,7 +275,7 @@ const Profile = () => {
                                         <Typography variant="h6">All moving time</Typography>
                                     </div>
                                     <div class="ms-auto p-2 bd-highlight">
-                                        <Typography variant="h6">{userStats.all_run_totals?allMovingTime: "0 s"}</Typography>
+                                        <Typography variant="h6">{userStats.all_run_totals_moving_time?allMovingTime: "0 s"}</Typography>
                                     </div>
                                 </div>
                                 {/* <a href="#" class="btn" style={{backgroundColor:"#00ADAD",color:"white"}}>Running activities</a> */}
@@ -292,7 +292,7 @@ const Profile = () => {
                                             <Typography variant="h6">Total ride distance</Typography>
                                         </div>
                                         <div class="ms-auto p-2 bd-highlight">
-                                            <Typography variant="h6">{userStats.all_ride_totals?`${userStats.all_ride_totals.distance} m`: "0 m"}</Typography>
+                                            <Typography variant="h6">{userStats.all_ride_totals_distance?`${userStats.all_ride_totals_distance} m`: "0 m"}</Typography>
                                         </div>
                                     </div>
                                     <div class="d-flex bd-highlight mb-3">
@@ -300,7 +300,7 @@ const Profile = () => {
                                             <Typography variant="h6">Number of rides</Typography>
                                         </div>
                                         <div class="ms-auto p-2 bd-highlight">
-                                            <Typography variant="h6">{userStats.all_ride_totals?`${userStats.all_ride_totals.count}`: "0"}</Typography>
+                                            <Typography variant="h6">{userStats.all_ride_totals_count?`${userStats.all_ride_totals_count}`: "0"}</Typography>
                                         </div>
                                     </div>
                                     <div class="d-flex bd-highlight mb-3">
@@ -308,7 +308,7 @@ const Profile = () => {
                                             <Typography variant="h6">All riding time</Typography>
                                         </div>
                                         <div class="ms-auto p-2 bd-highlight">
-                                            <Typography variant="h6">{userStats.all_ride_totals?allRidingTime: "0"}</Typography>
+                                            <Typography variant="h6">{userStats.all_ride_totals_moving_time?allRidingTime: "0"}</Typography>
                                         </div>
                                     </div>
                                     <div class="d-flex bd-highlight mb-3">
@@ -316,7 +316,7 @@ const Profile = () => {
                                             <Typography variant="h6">All moving time</Typography>
                                         </div>
                                         <div class="ms-auto p-2 bd-highlight">
-                                            <Typography variant="h6">{userStats.all_ride_totals?allMovingRidingTime: "0"}</Typography>
+                                            <Typography variant="h6">{userStats.all_ride_totals_moving_time?allMovingRidingTime: "0"}</Typography>
                                         </div>
                                     </div>
                                     {/* <a href="#" class="btn" style={{backgroundColor:"#00ADAD",color:"white"}}>Riding activities</a> */}
@@ -333,7 +333,7 @@ const Profile = () => {
                                         <Typography variant="h6">Total swim distance</Typography>
                                     </div>
                                     <div class="ms-auto p-2 bd-highlight">
-                                        <Typography variant="h6">{userStats.all_swim_totals?`${userStats.all_swim_totals.distance} m`: "0 m"}</Typography>
+                                        <Typography variant="h6">{userStats.all_swim_totals_distance?`${userStats.all_swim_totals_distance} m`: "0 m"}</Typography>
                                     </div>
                                 </div>
                                 <div class="d-flex bd-highlight mb-3">
@@ -341,7 +341,7 @@ const Profile = () => {
                                         <Typography variant="h6">Number of swims</Typography>
                                     </div>
                                     <div class="ms-auto p-2 bd-highlight">
-                                        <Typography variant="h6">{userStats.all_swim_totals?`${userStats.all_swim_totals.count}`: "0"}</Typography>
+                                        <Typography variant="h6">{userStats.all_swim_totals_count?`${userStats.all_swim_totals_count}`: "0"}</Typography>
                                     </div>
                                 </div>
                                 <div class="d-flex bd-highlight mb-3">
@@ -349,7 +349,7 @@ const Profile = () => {
                                         <Typography variant="h6">All swimming time</Typography>
                                     </div>
                                     <div class="ms-auto p-2 bd-highlight">
-                                        <Typography variant="h6">{userStats.all_swim_totals?allSwimmingTime: "0"}</Typography>
+                                        <Typography variant="h6">{userStats.all_swim_totals_moving_time?allSwimmingTime: "0"}</Typography>
                                     </div>
                                 </div>
                                 <div class="d-flex bd-highlight mb-3">
@@ -357,10 +357,9 @@ const Profile = () => {
                                         <Typography variant="h6">All moving time</Typography>
                                     </div>
                                     <div class="ms-auto p-2 bd-highlight">
-                                        <Typography variant="h6">{userStats.all_swim_totals?allMovingSwimmingTime: "0"}</Typography>
+                                        <Typography variant="h6">{userStats.all_swim_totals_moving_time?allMovingSwimmingTime: "0"}</Typography>
                                     </div>
                                 </div>
-                                {/* <a href="#" class="btn" style={{backgroundColor:"#00ADAD",color:"white"}}>Swimming activities</a> */}
                                 </div>
                             </div>
                         </div>

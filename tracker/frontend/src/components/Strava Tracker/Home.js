@@ -4,6 +4,8 @@ import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 import HomeActivity from './HomeActivity'
 import { IterationsIcon } from '@primer/octicons-react';
 import HomeUserFollowers from './HomeUserFollowers'
+import axios from "axios";
+
 
 const Home = () => {
 
@@ -14,6 +16,7 @@ const Home = () => {
     const [totalKcal,setTotalKcal] = useState(0)
     const currentDate=new Date().toISOString().slice(0,10);
     const kcalGoal = localStorage.getItem("kcalGoal")
+
 
     function authenticateStrava(){
         fetch('/strava/is_authenticated')
@@ -51,9 +54,12 @@ const Home = () => {
         fetch("/api/get-daily-food",requestOptions)
         .then((res)=>res.json())
         .then((data)=>{
-            data.map((item)=>{
-                setTotalKcal(kcal=>kcal+item.kcal)
-            })
+            if(data.length>0){
+                data.map((item)=>{
+                    setTotalKcal(kcal=>kcal+item.kcal)
+                })
+            }
+            
         })
     }
 
@@ -91,7 +97,7 @@ const Home = () => {
                             state={userInfo.state} 
                             country={userInfo.country} 
                             elapsed_time={item.elapsed_time} 
-                            max_speed={item.max_speed} 
+                            date={item.start_date_local.slice(0,10)} 
                             distance={item.distance} 
                             polyline = {item.polyline}
                             />
@@ -114,7 +120,7 @@ const Home = () => {
                 </div>
                 <div style={{paddingTop:50}} className="d-flex flex-sm-row flex-column">
                     <div className="home-profile-stats flex-column">
-                        <div className="mr-auto p-2 profile-pic-container"><img className="home-profileImage" src={userInfo.profile?userInfo.profile:"/static/images/UserDefault.png"}></img></div>
+                        <div className="mr-auto p-2 profile-pic-container"><img className="home-profileImage" src={userInfo.profile_pic?userInfo.profile_pic:"/static/images/UserDefault.png"}></img></div>
                         <HomeUserFollowers userInfo={userInfo} activities={activities}/>
                     </div>
                     <div className="flex-column home-middle-column-container">

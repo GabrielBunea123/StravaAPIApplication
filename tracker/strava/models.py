@@ -3,6 +3,7 @@ from django.db import models
 # Create your models here.
 class StravaToken(models.Model):
     user = models.CharField(max_length=50,unique=True)
+    user_id = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
     refresh_token = models.CharField(max_length=200)
     access_token = models.CharField(max_length=200)
@@ -48,5 +49,7 @@ class Activity(models.Model):
     start_date_local = models.DateTimeField(auto_now_add=True,blank=True,null=True)
     elapsed_time = models.IntegerField(blank=True,null=True)
     distance = models.IntegerField(blank=True,null=True)
+    calories = models.FloatField(blank=True,null=True)
+    speed = models.FloatField(blank=True, null=True)
     polyline = models.CharField(max_length=10000000000000000000000000,blank=True,null=True)
     

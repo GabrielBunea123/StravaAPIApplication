@@ -17,31 +17,31 @@ class ProductDetailsSerializer(serializers.ModelSerializer):
 class AddFoodSerializer(serializers.Serializer):
     creator = serializers.CharField()
     meal = serializers.CharField()
-    product_id = serializers.IntegerField()
+    product_id = serializers.CharField()
     product_name = serializers.CharField()
-    quantity = serializers.IntegerField()
-    kcal = serializers.IntegerField()
-    proteins = serializers.IntegerField()
-    carbs = serializers.IntegerField()
-    fats = serializers.IntegerField()
-    sugars = serializers.IntegerField()
-    fibers=serializers.IntegerField()
+    quantity = serializers.FloatField()
+    kcal = serializers.FloatField()
+    proteins = serializers.FloatField()
+    carbs = serializers.FloatField()
+    fats = serializers.FloatField()
+    sugars = serializers.FloatField()
+    fibers=serializers.FloatField()
     date = serializers.CharField()
 
 class DeleteDailyFoodSerializer(serializers.Serializer):
     creator = serializers.CharField()
     date=serializers.CharField()
-    product_id = serializers.IntegerField()
-    daily_food_id=serializers.IntegerField()
+    product_id = serializers.CharField()
+    daily_food_id=serializers.FloatField()
     meal=serializers.CharField()
 
 class EditDailyFoodSerializer(serializers.Serializer):
     creator = serializers.CharField()
-    quantity=serializers.IntegerField()
+    quantity=serializers.FloatField()
     date=serializers.CharField()
     meal=serializers.CharField()
     daily_food_id=serializers.IntegerField()
-    product_id = serializers.IntegerField()
+    product_id = serializers.CharField()
 
 class DailyFoodSerializer(serializers.ModelSerializer):
     class Meta:

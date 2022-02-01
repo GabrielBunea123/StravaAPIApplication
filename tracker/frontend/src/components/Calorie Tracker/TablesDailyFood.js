@@ -20,7 +20,7 @@ const TablesDailyFood = (props) => {
                     {props.renderDailyFood()}
                 </table>
             </div>
-            <a href={`/add-food/${props.meal.toLowerCase()}/${props.user_id}/${props.currentDate}`} class="btn" style={{backgroundColor:"#00ADAD",color:"white",marginTop:10,marginBottom:40}}>+ Add food</a>
+            <a href={`/add-food/${props.meal.toLowerCase()}/${props.user_id}/${props.currentDate}?#`} class="btn" style={{backgroundColor:"#00ADAD",color:"white",marginTop:10,marginBottom:40}}>+ Add food</a>
         </div>
     )
 }

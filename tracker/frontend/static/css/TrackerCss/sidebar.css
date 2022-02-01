@@ -1,44 +1,9 @@
-/* .sidebar-container{
-    height: 100%;
-    width:250px;
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    left: 0;
-    color:black;
-    background-color: #00747B;
-    overflow-x: hidden;
-    transition: 0.5s;
-}
-@media screen and (max-width: 400px) {
-    .sidebar-container{
-        height: 100%;
-        width:100%;
-        position: fixed;
-        z-index: 1;
-        top: 0;
-        left: 0;
-        background-color: #634086;
-        overflow-x: hidden;
-        transition: 0.5s;
-    }
-
-}
-
-.side-close-btn{
-    position: absolute;
-    
-}
-.side-menu-item{
-    position: absolute;
-    display: block;
-}
-.toggler-container{
-    height:45px;
-}
-.toggle-side-btn{
-    height:100%;
-} */
 .item-nav-space{
     padding-right: 10px;
+}
+.navbar{
+    padding:10px;
+}
+.side-item-font{
+    font-size:21px;
 }

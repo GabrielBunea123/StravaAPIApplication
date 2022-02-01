@@ -37,13 +37,14 @@ def strava_callback(request,format=None):
     token_type = response.get('token_type')
     refresh_token = response.get('refresh_token')
     expires_in = response.get('expires_in')
+    user_id = response.get('athlete')['id']
     error = response.get('error')
+
 
     if not request.session.exists(request.session.session_key):
         request.session.create()
 
-    update_or_create_user_tokens(
-        request.session.session_key, access_token, token_type, expires_in, refresh_token)
+    update_or_create_user_tokens(request.session.session_key, access_token, user_id, token_type, expires_in, refresh_token)
 
     return redirect('frontend:home')
 
@@ -63,11 +64,11 @@ class AuthenticatedUser(APIView):
                        'Authorization': "Bearer " + user.access_token}
 
             response = get("https://www.strava.com/api/v3/athlete", {}, headers=headers).json()#this is where we got the user details from
-            user_id = response.get('id')
+            user_id = user.user_id
 
             userDetails = UserDetails.objects.filter(user_id = user_id)
 
-            if not userDetails.exists():
+            if not userDetails.exists() and response:
                 userDetails = UserDetails.objects.create(user_id= response.get('id'),
                  username=response.get('username'),
                  firstname=response.get('firstname'),
@@ -78,7 +79,7 @@ class AuthenticatedUser(APIView):
                  premium_account=response.get('premium'),
                  weight=response.get('weight'),
                  profile_pic=response.get('profile'))
-            else:
+            elif response:
                 userDetails = UserDetails.objects.filter(user_id = user_id)[0]
                 userDetails.username=response.get('username')
                 userDetails.firstname=response.get('firstname')
@@ -100,13 +101,14 @@ class GetUserStats(APIView):
         headers = {'Content-Type': 'application/json',
                        'Authorization': "Bearer " + user.access_token}
 
-        response = get("https://www.strava.com/api/v3/athlete", {}, headers=headers).json()#get the athlete
-        stats =get(f"https://www.strava.com/api/v3/athletes/{response.get('id')}/stats",{},headers=headers).json()
-        
-        userStats = UserStats.objects.filter(user_id = response.get('id'))[0]
+        user_id = user.user_id
 
-        if not userStats:
-            userStats = UserStats.objects.create(user_id= response.get('id'),
+        stats =get(f"https://www.strava.com/api/v3/athletes/{user_id}/stats",{},headers=headers).json()
+
+        userStats = UserStats.objects.filter(user_id = user_id)
+
+        if not userStats and stats:
+            userStats = UserStats.objects.create(user_id= user_id,
                 all_run_totals_count=stats["all_run_totals"]['count'],
                 all_run_totals_distance=stats["all_run_totals"]['distance'],
                 all_run_totals_moving_time=stats["all_run_totals"]['moving_time'],
@@ -117,22 +119,24 @@ class GetUserStats(APIView):
                 all_swim_totals_distance=stats["all_swim_totals"]['distance'],
                 all_swim_totals_moving_time=stats["all_swim_totals"]['moving_time'],
                 biggest_ride_distance = stats["biggest_ride_distance"])
-        else:
-            userStats = UserStats.objects.filter(user_id = response.get('id'))[0]
+        elif stats:
+            userStats = UserStats.objects.filter(user_id = user_id)
 
-            userStats.user_id= response.get('id')
-            userStats.all_run_totals_count=stats["all_run_totals"]['count']
-            userStats.all_run_totals_distance=stats["all_run_totals"]['distance']
-            userStats.all_run_totals_moving_time=stats["all_run_totals"]['moving_time']
-            userStats.all_ride_totals_count=stats["all_ride_totals"]['count']
-            userStats.all_ride_totals_distance=stats["all_ride_totals"]['distance']
-            userStats.all_ride_totals_moving_time=stats["all_ride_totals"]['moving_time']
-            userStats.all_swim_totals_count=stats["all_swim_totals"]['count']
-            userStats.all_swim_totals_distance=stats["all_swim_totals"]['distance']
-            userStats.all_swim_totals_moving_time=stats["all_swim_totals"]['moving_time']
-            userStats.biggest_ride_distance = stats["biggest_ride_distance"]
+            userStats[0].user_id= user_id
+            userStats[0].all_run_totals_count=stats["all_run_totals"]['count']
+            userStats[0].all_run_totals_distance=stats["all_run_totals"]['distance']
+            userStats[0].all_run_totals_moving_time=stats["all_run_totals"]['moving_time']
+            userStats[0].all_ride_totals_count=stats["all_ride_totals"]['count']
+            userStats[0].all_ride_totals_distance=stats["all_ride_totals"]['distance']
+            userStats[0].all_ride_totals_moving_time=stats["all_ride_totals"]['moving_time']
+            userStats[0].all_swim_totals_count=stats["all_swim_totals"]['count']
+            userStats[0].all_swim_totals_distance=stats["all_swim_totals"]['distance']
+            userStats[0].all_swim_totals_moving_time=stats["all_swim_totals"]['moving_time']
+            userStats[0].biggest_ride_distance = stats["biggest_ride_distance"]
 
-        return Response(UserStatsSerializer(userStats).data,status=status.HTTP_200_OK)
+        userStats = UserStats.objects.filter(user_id = user_id)
+
+        return Response(UserStatsSerializer(userStats[0]).data,status=status.HTTP_200_OK)
 
 class CreateActivity(APIView):
     serializer_class = CreateActivitySerializer
@@ -162,21 +166,21 @@ class GetStravaActivities(APIView):
     def get(self,request,format=None):
         user = StravaToken.objects.get(user= self.request.session.session_key)
         response =get("https://www.strava.com/api/v3/athlete/activities",headers={'Authorization': "Bearer " + user.access_token}).json()
+        user_id = user.user_id
 
- 
-        for i in response:
-            user_id = i['athlete']['id']
-            if not Activity.objects.filter(activity_id=i['id']).exists():
-                activity = Activity(
-                    user_id = i['athlete']['id'],
-                    activity_id = i['id'],
-                    name = i['name'],
-                    activity_type = i['type'],
-                    start_date_local = i['start_date_local'],
-                    elapsed_time = i['elapsed_time'],
-                    distance = i['distance'],
-                )
-                activity.save()
+        if response:
+            for i in response:
+                if not Activity.objects.filter(activity_id=i['id']).exists():
+                    activity = Activity(
+                        user_id = i['athlete']['id'],
+                        activity_id = i['id'],
+                        name = i['name'],
+                        activity_type = i['type'],
+                        start_date_local = i['start_date_local'],
+                        elapsed_time = i['elapsed_time'],
+                        distance = i['distance'],
+                    )
+                    activity.save()
             
         allActivities = Activity.objects.filter(user_id=user_id)
 
@@ -193,10 +197,10 @@ class GetOneStravaActivity(APIView):
             response=get(f"https://www.strava.com/api/v3/activities/{serializer.data.get('activity_id')}",{},headers={'Authorization': "Bearer " + user.access_token}).json()
 
             activity = Activity.objects.filter(activity_id=serializer.data.get('activity_id'))
+            print(response['average_speed'])
 
-            if response['map']['polyline']:
-                activity = Activity.objects.filter(activity_id=serializer.data.get('activity_id'))
-                activity.update(polyline=response['map']['polyline'])
+            if response:
+                activity.update(name=response['name'],activity_type=response['type'],start_date_local=response['start_date_local'],elapsed_time=response['elapsed_time'],distance=response['distance'],speed=response['average_speed'],calories=response['calories'],polyline=response['map']['polyline'])
 
             return Response(GetAllActivitiesSerializer(activity[0]).data,status=status.HTTP_200_OK)
         return Response({"Not found":"The activity doesn't exist"},status=status.HTTP_404_NOT_FOUND)

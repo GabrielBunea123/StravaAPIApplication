@@ -1,6 +1,6 @@
 import React from 'react'
 
-const RecentComponent = (props) => {
+const OutsideSearch = (props) => {
     return (
         <div className="card" style={{marginBottom:20,backgroundColor:"#00737B",borderRadius:30,padding:10,color:"white"}}>
             <div style={{marginTop:10}} class="d-flex justify-content-between">
@@ -36,13 +36,13 @@ const RecentComponent = (props) => {
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td>{props.macrosDetails.length>0?props.macrosDetails[0].quantity:null} (g)</td>
-                                                <td>{props.macrosDetails.length>0?props.macrosDetails[0].kcal:null}</td>
-                                                <td>{props.macrosDetails.length>0?props.macrosDetails[0].proteins:null} (g)</td>
-                                                <td>{props.macrosDetails.length>0?props.macrosDetails[0].carbs:null} (g)</td>
-                                                <td>{props.macrosDetails.length>0?props.macrosDetails[0].fats:null} (g)</td>
-                                                <td>{props.macrosDetails.length>0?props.macrosDetails[0].sugars:null} (g)</td>
-                                                <td>{props.macrosDetails.length>0?props.macrosDetails[0].fibers:null} (g)</td>
+                                                <td>{props.macrosDetails.length>0?props.macrosDetails[0].fields.nf_serving_weight_grams:null} (g)</td>
+                                                <td>{props.macrosDetails.length>0?props.macrosDetails[0].fields.nf_calories:null}</td>
+                                                <td>{props.macrosDetails.length>0?props.macrosDetails[0].fields.nf_protein:null} (g)</td>
+                                                <td>{props.macrosDetails.length>0?props.macrosDetails[0].fields.nf_total_carbohydrate:null} (g)</td>
+                                                <td>{props.macrosDetails.length>0?props.macrosDetails[0].fields.nf_fats:null} (g)</td>
+                                                <td>{props.macrosDetails.length>0?props.macrosDetails[0].fields.nf_sugars:null} (g)</td>
+                                                <td>{props.macrosDetails.length>0?props.macrosDetails[0].fields.nf_dietary_fibe:null} (g)</td>
                                             </tr>
                                         </tbody>
                                         
@@ -71,4 +71,4 @@ const RecentComponent = (props) => {
     )
 }
 
-export default RecentComponent
+export default OutsideSearch

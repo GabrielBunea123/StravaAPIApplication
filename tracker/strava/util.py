@@ -34,18 +34,19 @@ def get_user_details(user_id,username,first_name,last_name,city,country,sex,prem
         user_details.save()
     return user_details
 
-def update_or_create_user_tokens(session_id,access_token,token_type,expires_in,refresh_token):
+def update_or_create_user_tokens(session_id,access_token,user_id,token_type,expires_in,refresh_token):
     tokens = get_user_tokens(session_id)
     expires_in = timezone.now() + timedelta(seconds=expires_in)
     
     if tokens:
         tokens.access_token =access_token
         tokens.token_type = token_type
+        tokens.user_id= user_id
         tokens.expires_in = expires_in
         tokens.refresh_token = refresh_token
         tokens.save(update_fields=['access_token','token_type','expires_in','refresh_token'])
     else:
-        tokens = StravaToken(user = session_id,access_token=access_token,refresh_token=refresh_token,token_type=token_type,expires_in=expires_in)
+        tokens = StravaToken(user = session_id,access_token=access_token,user_id=user_id,refresh_token=refresh_token,token_type=token_type,expires_in=expires_in)
         tokens.save()
 
 def is_strava_authenticated(session_id):
@@ -59,10 +60,11 @@ def is_strava_authenticated(session_id):
     return False
 
 def refresh_strava_token(session_id):
-    refresh_token = get_user_tokens(session_id).refresh_token
+    stravaTokens = get_user_tokens(session_id)
+    print(stravaTokens.user_id)
     response = post("https://www.strava.com/oauth/token",data={
         'grant_type':'refresh_token',
-        'refresh_token':refresh_token,
+        'refresh_token':stravaTokens.refresh_token,
         'client_id':settings.CLIENT_ID,
         'client_secret':settings.CLIENT_SECRET
     }).json()
@@ -71,5 +73,5 @@ def refresh_strava_token(session_id):
     token_type = response.get('token_type')
     expires_in = response.get('expires_in')
 
-    update_or_create_user_tokens(session_id, access_token, token_type, expires_in, refresh_token)
+    update_or_create_user_tokens(session_id, access_token, stravaTokens.user_id, token_type, expires_in, stravaTokens.refresh_token)
 

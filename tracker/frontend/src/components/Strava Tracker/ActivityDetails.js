@@ -129,7 +129,7 @@ const ActivityDetails = (props) => {
                             <div className="p-2"><i class="fas fa-map-marker-alt"></i> {userInfo.city}, {userInfo.state}, {userInfo.country}</div>
                         </div>
                         <div className="d-flex flex-sm-row flex-column">
-                            <div className="p-2">Start date and time: {activity.start_date}</div>
+                            <div className="p-2">Start date and time: {activity.start_date_local}</div>
                         </div>
                         <div className="d-flex flex-column bd-highlight mb-3 activity-container">
                             <div class="card text-center profile-recent-activities-container">
@@ -146,6 +146,7 @@ const ActivityDetails = (props) => {
                                                 <th scope="col"><Typography variant="h6">Distance</Typography></th>
                                                 <th scope="col"><Typography variant="h6">Time</Typography></th>
                                                 <th scope="col"><Typography variant="h6">Speed</Typography></th>
+                                                <th scope="col"><Typography variant="h6">Calories</Typography></th>
                                                 </tr>
                                             </thead>
                                             <thead>
@@ -153,7 +154,8 @@ const ActivityDetails = (props) => {
                                                     <th scope="col"><Typography variant="h6">{activity?activity.activity_type:null}</Typography></th>
                                                     <th scope="col"><Typography variant="h6">{activity?activity.distance:null} m</Typography></th>
                                                     <th scope="col"><Typography variant="h6">{activity?activity.elapsed_time:null}</Typography></th>
-                                                    <th scope="col"><Typography variant="h6">{activity?activity.average_speed:null} m/s</Typography></th>
+                                                    <th scope="col"><Typography variant="h6">{activity?activity.speed:null} m/s</Typography></th>
+                                                    <th scope="col"><Typography variant="h6">{activity?activity.calories:null}</Typography></th>
                                                 </tr>
                                             </thead>
                                         </table>

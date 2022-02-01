@@ -2,7 +2,9 @@ import React,{useState,useEffect} from 'react'
 import { Typography,TextField,Button,Grid,FormControl} from '@material-ui/core'
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { getInputUnstyledUtilityClass, getListItemSecondaryActionClassesUtilityClass } from '@mui/material';
-import RecentComponent from "./RecentComponent"
+import OutsideSearch from "./OutsideSearch"
+import InsideSearch from "./InsideSearch"
+import axios from 'axios'
 
 const RecentFood = (props) => {
 
@@ -25,22 +27,6 @@ const RecentFood = (props) => {
         fetch("/api/get-all-products")
         .then((res)=>res.json())
         .then((data)=>setAllFood(data))
-    }
-
-    function searchFood(){
-        const requestOptions={
-            method:"POST",
-            headers:{'Content-Type': 'application/json'},
-            body:JSON.stringify({
-                product:searched
-            })
-        }
-        fetch("/api/search-food",requestOptions)
-        .then((res)=>res.json())
-        .then((data)=>{
-            setOutsideSearch(data)
-            setBoolOutsideSearch(true)
-        })
     }
 
     function handleOnChangeSearch(event){
@@ -67,11 +53,32 @@ const RecentFood = (props) => {
             setRecentFoods(data)
         })
     }
-    function addDailyFood(){
-        const result = allFood.filter(item=>item.id==addProductId)//get the item with that id from all food
+
+    function searchFood(){ //nutritionx food api
+        const options = {
+            method: 'GET',
+            url: `https://nutritionix-api.p.rapidapi.com/v1_1/search/${searched}`,
+            params: {fields: 'item_name,item_id,brand_name,nf_calories,nf_total_fat,nf_sugars,nf_protein,nf_total_carbohydrate,nf_serving_weight_grams,nf_dietary_fiber'},
+            headers: {
+                'x-rapidapi-host': 'nutritionix-api.p.rapidapi.com',
+                'x-rapidapi-key': '38a98784d7mshfa9fcbba45b0c2bp1e73dcjsn8da9d4df854d'
+            }
+        };
+          
+        axios.request(options).then(function (response) {
+            setBoolOutsideSearch(true)
+            setOutsideSearch(response.data.hits);
+        }).catch(function (error) {
+            console.error(error);
+        });
+
+    }
+    
+    function addDailyFoodOutside(){
+        const result = outsideSearch.filter(item=>item._id==addProductId)//get the item with that id from all food
         var funcQuantity=quantity;
         if(quantity == 0) {
-            funcQuantity=result[0].quantity
+            funcQuantity=result[0].fields.nf_serving_weight_grams
         }
         const requestOptions = {
             method:"POST",
@@ -79,14 +86,14 @@ const RecentFood = (props) => {
             body:JSON.stringify({
                 creator:user_id,
                 meal:time,
-                product_name:result[0].product,
+                product_name:result[0].fields.item_name,
                 quantity:funcQuantity,
-                kcal:Math.floor((result[0].kcal*funcQuantity)/result[0].quantity),
-                proteins:Math.floor((result[0].proteins*funcQuantity)/result[0].quantity),
-                carbs:Math.floor((result[0].carbs*funcQuantity)/result[0].quantity),
-                fats:Math.floor((result[0].fats*funcQuantity)/result[0].quantity),
-                sugars:Math.floor((result[0].sugars*funcQuantity)/result[0].quantity),
-                fibers:Math.floor((result[0].fibers*funcQuantity)/result[0].quantity),
+                kcal:Math.floor((result[0].fields.nf_calories*funcQuantity)/result[0].fields.nf_serving_weight_grams),
+                proteins:Math.floor((result[0].fields.nf_protein*funcQuantity)/result[0].fields.nf_serving_weight_grams),
+                carbs:Math.floor((result[0].fields.nf_total_carbohydrate*funcQuantity)/result[0].fields.nf_serving_weight_grams),
+                fats:Math.floor((result[0].fields.nf_total_fat*funcQuantity)/result[0].fields.nf_serving_weight_grams),
+                sugars:Math.floor((result[0].fields.nf_sugars*funcQuantity)/result[0].fields.nf_serving_weight_grams),
+                fibers:Math.floor((result[0].fields.nf_dietary_fiber*funcQuantity)/result[0].fields.nf_serving_weight_grams),
                 date:currentDate,
                 product_id:addProductId
             })
@@ -101,10 +108,15 @@ const RecentFood = (props) => {
             headers:{"Content-Type": "application/json"},
             body:JSON.stringify({
                 creator:user_id,
-                product_name:result[0].product,
+                product_name:result[0].fields.item_name,
                 product_id:addProductId,
-                grams:result[0].quantity,
-                kcal:result[0].kcal,
+                grams:result[0].fields.nf_serving_weight_grams,
+                kcal:result[0].fields.nf_calories,
+                proteins:result[0].fields.nf_protein,
+                carbs:result[0].fields.nf_total_carbohydrate,
+                fats:result[0].fields.nf_total_fat,
+                sugars:result[0].fields.nf_sugars,
+                fibers:result[0].fields.nf_dietary_fiber,
             })
         }
         fetch("/api/add-recent-food",recentFoodRequestOptions)
@@ -112,9 +124,63 @@ const RecentFood = (props) => {
         .then((data)=>console.log(data))
         
     }
+    function addDailyFood(){
+        const result = recentFoods.filter(item=>item.product_id==addProductId)//get the item with that id from all food
+        console.log(result)
+        var funcQuantity=quantity;
+        if(quantity == 0) {
+            funcQuantity=result[0].grams
+        }
+        const requestOptions = {
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({
+                creator:user_id,
+                meal:time,
+                product_name:result[0].product_name,
+                quantity:funcQuantity,
+                kcal:result[0].kcal,
+                proteins:result[0].proteins,
+                carbs:result[0].carbs,
+                fats:result[0].fats,
+                sugars:result[0].sugars,
+                fibers:result[0].fibers,
+                date:currentDate,
+                product_id:addProductId
+            })
+        }
+        fetch("/api/add-daily-food",requestOptions)
+        .then((res)=>res.json())
+        .then((data)=>null)
+
+        //add the product to recent food if it isn't already there
+        const recentFoodRequestOptions = {
+            method:"POST",
+            headers:{"Content-Type": "application/json"},
+            body:JSON.stringify({
+                creator:user_id,
+                product_name:result[0].product_name,
+                product_id:addProductId,
+                grams:result[0].grams,
+                kcal:result[0].kcal,
+                proteins:result[0].proteins,
+                carbs:result[0].carbs,
+                fats:result[0].fats,
+                sugars:result[0].sugars,
+                fibers:result[0].fibers,
+            })
+        }
+        fetch("/api/add-recent-food",recentFoodRequestOptions)
+        .then((res)=>res.json())
+        .then((data)=>console.log(data))
+        
+    }
+    function getMacrosOutside(id){
+        setMacrosDetails(outsideSearch.filter(item=>item._id==id))
+    }
     function getMacros(id){
-        setMacrosDetails(allFood.filter(item=>item.id==id))
-        console.log(macrosDetails[0])
+        console.log(id)
+        setMacrosDetails(recentFoods.filter(item=>item.product_id==id))
     }
     function handleQuantityChange(event){
         setQuantity(event.target.value)
@@ -124,7 +190,7 @@ const RecentFood = (props) => {
             return(
                 <Grid item xs={12}>
                     {recentFoods.length>0?recentFoods.map((item)=>(
-                        <RecentComponent product={item.product_name} quantity={item.quantity} kcal={item.kcal} user_id={user_id} product_id={item.product_id} setAddProductId={setAddProductId} getMacros={getMacros} macrosDetails={macrosDetails} handleQuantityChange={handleQuantityChange} currentDate={currentDate} addDailyFood={addDailyFood}/>
+                        <InsideSearch product={item.product_name} quantity={item.quantity} kcal={item.kcal} user_id={user_id} product_id={item.product_id} setAddProductId={setAddProductId} getMacros={getMacros} macrosDetails={macrosDetails} handleQuantityChange={handleQuantityChange} currentDate={currentDate} addDailyFood={addDailyFood} />
                     )):<Grid item xs={12} align="center"><Typography style={{color:"gray"}} variant="h3">There are no recent products</Typography></Grid>}
                 </Grid>
             )
@@ -134,7 +200,7 @@ const RecentFood = (props) => {
                 return(
                     <Grid item xs={12}>
                         {outsideSearch.length>0?outsideSearch.map((item)=>(
-                            <RecentComponent product={item.product} quantity={item.quantity} kcal={item.kcal} user_id={user_id} product_id={item.product_id} setAddProductId={setAddProductId} getMacros={getMacros} macrosDetails={macrosDetails} handleQuantityChange={handleQuantityChange} currentDate={currentDate} addDailyFood={addDailyFood}/>
+                            <OutsideSearch product={item.fields.item_name} quantity={item.fields.nf_serving_weight_grams} kcal={item.fields.nf_calories} product_id={item.fields.item_id} user_id={user_id} setAddProductId={setAddProductId} getMacros={getMacrosOutside} macrosDetails={macrosDetails} handleQuantityChange={handleQuantityChange} currentDate={currentDate} addDailyFood={addDailyFoodOutside}/>
                         )):<Grid item xs={12} align="center"><Typography style={{color:"gray"}} variant="h3">There are no recent products</Typography></Grid>}
                     </Grid>
                 )
@@ -143,8 +209,7 @@ const RecentFood = (props) => {
                 return(
                     <Grid item xs={12}>
                         {searchedInRecent.length>0?searchedInRecent.map((item)=>(
-                            
-                            <RecentComponent product={item.product_name} quantity={item.quantity} kcal={item.kcal} user_id={user_id} product_id={item.product_id} setAddProductId={setAddProductId} getMacros={getMacros} macrosDetails={macrosDetails} handleQuantityChange={handleQuantityChange} currentDate={currentDate} addDailyFood={addDailyFood}/>
+                            <InsideSearch product={item.product_name} quantity={item.quantity} kcal={item.kcal} user_id={user_id} product_id={item.product_id} setAddProductId={setAddProductId} getMacros={getMacros} macrosDetails={macrosDetails} handleQuantityChange={handleQuantityChange} currentDate={currentDate} addDailyFood={addDailyFood} />
                         )):<Grid item xs={12} align="center"><Typography style={{color:"gray"}} variant="h3">There are no recent products</Typography></Grid>}
                     </Grid>
                 )

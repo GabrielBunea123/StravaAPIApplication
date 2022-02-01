@@ -87,15 +87,18 @@ const DailyCalories = (props) => {
         fetch("/api/get-daily-food",requestOptions)
         .then((res)=>res.json())
         .then((data)=>{
-            setDailyFood(data)
-            data.map((item)=>{
-                setTotalKcal(kcal=>kcal+item.kcal);
-                setTotalProteins(proteins=>proteins+item.proteins)
-                setTotalCarbs(carbs=>carbs+item.carbs)
-                setTotalFats(fats=>fats+item.fats)
-                setTotalSugar(sugar=>sugar+item.sugars)
-                setTotalFibers(fibers=>fibers+item.fibers)
-            })
+            if(data.length>0){
+                setDailyFood(data)
+                data.map((item)=>{
+                    setTotalKcal(kcal=>kcal+item.kcal);
+                    setTotalProteins(proteins=>proteins+item.proteins)
+                    setTotalCarbs(carbs=>carbs+item.carbs)
+                    setTotalFats(fats=>fats+item.fats)
+                    setTotalSugar(sugar=>sugar+item.sugars)
+                    setTotalFibers(fibers=>fibers+item.fibers)
+                })
+            }
+            
             
         })
     }

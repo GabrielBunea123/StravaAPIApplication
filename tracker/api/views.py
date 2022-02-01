@@ -84,7 +84,6 @@ class AddDailyFood(APIView):
 
             user_food = UserDailyFood(creator=creator,meal=meal,product_name=product_name,quantity=quantity,kcal=kcal,proteins=proteins,carbs=carbs,fats=fats,sugars=sugars,fibers=fibers,date=added_date,product_id=product_id)
             user_food.save()
-
             return Response(AddFoodSerializer(user_food).data,status=status.HTTP_201_CREATED)
         return Response({'Bad request':"Try again"},status = status.HTTP_400_BAD_REQUEST)
 
@@ -155,15 +154,23 @@ class AddRecentUserFoods(APIView):
             creator = serializer.data.get('creator')
             product_name=serializer.data.get('product_name')
             grams = serializer.data.get('grams')
-            kcal = serializer.data.get('kcal')
+            kcal=serializer.data.get('kcal')
+            proteins=serializer.data.get('proteins')
+            carbs=serializer.data.get('carbs')
+            fats=serializer.data.get('fats')
+            sugars = serializer.data.get('sugars')
+            fibers=serializer.data.get('fibers')
+
             product_id = serializer.data.get('product_id')
 
             if not RecentUserFoods.objects.filter(product_id=product_id,creator=creator).exists():
 
-                food = RecentUserFoods(creator=creator,product_name=product_name,grams=grams,kcal=kcal,product_id=product_id)
+                food = RecentUserFoods(creator=creator,product_name=product_name,grams=grams,kcal=kcal,proteins=proteins,carbs=carbs,fats=fats,sugars=sugars,fibers=fibers,product_id=product_id)
                 food.save()
 
                 return Response(RecentUserFoodsSerializer(food).data,status=status.HTTP_201_CREATED)
+            return Response({'All good':"This already exists in recent"},status=status.HTTP_200_OK)
+        print(serializer.errors)
         return Response({'Bad request':"Try again"},status = status.HTTP_400_BAD_REQUEST)
 
 class GetRecentUserFoods(APIView):

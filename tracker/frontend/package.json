@@ -30,6 +30,7 @@
     "@mui/icons-material": "^5.2.4",
     "@mui/material": "^5.2.2",
     "@primer/octicons-react": "^16.2.0",
+    "axios": "^0.25.0",
     "boostrap": "^2.0.0",
     "google-map-react": "^2.1.10",
     "mapbox-gl": "^2.6.1",

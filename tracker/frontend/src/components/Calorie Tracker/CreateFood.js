@@ -71,6 +71,11 @@ const CreateFood = (props) => {
                     product_id:data.product_id,
                     grams:quantity,
                     kcal:kcal,
+                    proteins:proteins,
+                    carbs:carbs,
+                    fats:fats,
+                    sugars:sugar,
+                    fibers:fibers
                 })
             }
             fetch("/api/add-recent-food",recentFoodRequestOptions)
