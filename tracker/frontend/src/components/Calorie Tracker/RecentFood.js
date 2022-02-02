@@ -31,7 +31,7 @@ const RecentFood = (props) => {
 
     function handleOnChangeSearch(event){
         setSearched(event.target.value);
-        setSearchedInRecent(recentFoods.filter(item=>item.product_name.includes(event.target.value)?item:null))
+        setSearchedInRecent(recentFoods.filter(item=>item.product_name.toLowerCase().includes(event.target.value.toLowerCase())?item:null))
         setOutsideSearch([])
     
     }
@@ -191,7 +191,7 @@ const RecentFood = (props) => {
                 <Grid item xs={12}>
                     {recentFoods.length>0?recentFoods.map((item)=>(
                         <InsideSearch product={item.product_name} quantity={item.quantity} kcal={item.kcal} user_id={user_id} product_id={item.product_id} setAddProductId={setAddProductId} getMacros={getMacros} macrosDetails={macrosDetails} handleQuantityChange={handleQuantityChange} currentDate={currentDate} addDailyFood={addDailyFood} />
-                    )):<Grid item xs={12} align="center"><Typography style={{color:"gray"}} variant="h3">There are no recent products</Typography></Grid>}
+                    )):<Grid item xs={12} align="center"><Typography style={{color:"gray"}} variant="h3">There are no recent products named like that</Typography></Grid>}
                 </Grid>
             )
         }
@@ -201,7 +201,7 @@ const RecentFood = (props) => {
                     <Grid item xs={12}>
                         {outsideSearch.length>0?outsideSearch.map((item)=>(
                             <OutsideSearch product={item.fields.item_name} quantity={item.fields.nf_serving_weight_grams} kcal={item.fields.nf_calories} product_id={item.fields.item_id} user_id={user_id} setAddProductId={setAddProductId} getMacros={getMacrosOutside} macrosDetails={macrosDetails} handleQuantityChange={handleQuantityChange} currentDate={currentDate} addDailyFood={addDailyFoodOutside}/>
-                        )):<Grid item xs={12} align="center"><Typography style={{color:"gray"}} variant="h3">There are no recent products</Typography></Grid>}
+                        )):<Grid item xs={12} align="center"><Typography style={{color:"gray"}} variant="h3">There are no recent products named like that</Typography></Grid>}
                     </Grid>
                 )
             }
@@ -210,7 +210,7 @@ const RecentFood = (props) => {
                     <Grid item xs={12}>
                         {searchedInRecent.length>0?searchedInRecent.map((item)=>(
                             <InsideSearch product={item.product_name} quantity={item.quantity} kcal={item.kcal} user_id={user_id} product_id={item.product_id} setAddProductId={setAddProductId} getMacros={getMacros} macrosDetails={macrosDetails} handleQuantityChange={handleQuantityChange} currentDate={currentDate} addDailyFood={addDailyFood} />
-                        )):<Grid item xs={12} align="center"><Typography style={{color:"gray"}} variant="h3">There are no recent products</Typography></Grid>}
+                        )):<Grid item xs={12} align="center"><Typography style={{color:"gray"}} variant="h3">There are no recent products named like that</Typography></Grid>}
                     </Grid>
                 )
             }

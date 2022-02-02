@@ -11,7 +11,7 @@ const TablesDailyFood = (props) => {
                             <th scope="col">Food name</th>
                             <th scope="col">Quantity</th>
                             <th scope="col">Kcal</th>
-                            <th scope="col">Proteins</th>
+                            {/* <th scope="col">Proteins</th> */}
                             <th scope="col">Edit</th>
                             <th scope="col">Delete</th>
                         </tr>

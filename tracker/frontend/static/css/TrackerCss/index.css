@@ -110,16 +110,8 @@ p{
     .home-followers-stats{
         margin:2px;
     }
-    .home-profile-stats{
-        padding:0;
-        display:block;
-        
-    }
     .h5-followers{
         font-size:4vw;
-    }
-    .small-stats{
-        display: none;
     }
 
 }
