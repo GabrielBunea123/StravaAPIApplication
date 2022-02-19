@@ -1,7 +1,6 @@
 import React from 'react';
 
 const InsideSearch = (props) => {
-    console.log(props.macrosDetails)
     return (
         <div className="card" style={{marginBottom:20,backgroundColor:"#00737B",borderRadius:30,padding:10,color:"white"}}>
             <div style={{marginTop:10}} class="d-flex justify-content-between">

@@ -68,11 +68,12 @@ class AuthenticatedUser(APIView):
 
             userDetails = UserDetails.objects.filter(user_id = user_id)
 
-            if not userDetails.exists() and response:
+            if not userDetails.exists() and not response:
                 userDetails = UserDetails.objects.create(user_id= response.get('id'),
                  username=response.get('username'),
                  firstname=response.get('firstname'),
                  lastname=response.get('lastname'),
+                 followers = response.get('follower_count'),
                  city=response.get('city'),
                  country=response.get('country'),
                  sex=response.get('sex'),
@@ -84,6 +85,7 @@ class AuthenticatedUser(APIView):
                 userDetails.username=response.get('username')
                 userDetails.firstname=response.get('firstname')
                 userDetails.lastname=response.get('lastname')
+                userDetails.followers = response.get('follower_count')
                 userDetails.city=response.get('city')
                 userDetails.country=response.get('country')
                 userDetails.sex=response.get('sex')
@@ -167,7 +169,6 @@ class GetStravaActivities(APIView):
         user = StravaToken.objects.get(user= self.request.session.session_key)
         response =get("https://www.strava.com/api/v3/athlete/activities",headers={'Authorization': "Bearer " + user.access_token}).json()
         user_id = user.user_id
-
         if response:
             for i in response:
                 if not Activity.objects.filter(activity_id=i['id']).exists():
@@ -197,8 +198,6 @@ class GetOneStravaActivity(APIView):
             response=get(f"https://www.strava.com/api/v3/activities/{serializer.data.get('activity_id')}",{},headers={'Authorization': "Bearer " + user.access_token}).json()
 
             activity = Activity.objects.filter(activity_id=serializer.data.get('activity_id'))
-            print(response['average_speed'])
-
             if response:
                 activity.update(name=response['name'],activity_type=response['type'],start_date_local=response['start_date_local'],elapsed_time=response['elapsed_time'],distance=response['distance'],speed=response['average_speed'],calories=response['calories'],polyline=response['map']['polyline'])
 

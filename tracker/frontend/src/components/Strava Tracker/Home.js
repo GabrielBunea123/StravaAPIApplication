@@ -85,7 +85,7 @@ const Home = () => {
 
     const renderActivities=()=>{
         return(
-            <div className="home-activities-container">
+            <div className="home-activities-container d-flex flex-wrap justify-content-evenly">
                 {activities.length>0?
                     
                     activities.map((item, index) => (

@@ -15,6 +15,7 @@ class UserDetails(models.Model):
     username = models.CharField(max_length=200,blank=True,null=True)
     firstname = models.CharField(max_length=200,blank=True,null=True)
     lastname = models.CharField(max_length=200,blank=True,null=True)
+    followers = models.IntegerField(blank=True,null=True)
     city = models.CharField(max_length=200,blank=True,null=True)
     country = models.CharField(max_length=200,blank=True,null=True)
     sex = models.CharField(max_length=200,blank=True,null=True)

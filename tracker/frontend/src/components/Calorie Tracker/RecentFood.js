@@ -126,7 +126,6 @@ const RecentFood = (props) => {
     }
     function addDailyFood(){
         const result = recentFoods.filter(item=>item.product_id==addProductId)//get the item with that id from all food
-        console.log(result)
         var funcQuantity=quantity;
         if(quantity == 0) {
             funcQuantity=result[0].grams
@@ -179,7 +178,6 @@ const RecentFood = (props) => {
         setMacrosDetails(outsideSearch.filter(item=>item._id==id))
     }
     function getMacros(id){
-        console.log(id)
         setMacrosDetails(recentFoods.filter(item=>item.product_id==id))
     }
     function handleQuantityChange(event){

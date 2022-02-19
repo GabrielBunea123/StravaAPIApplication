@@ -61,7 +61,6 @@ def is_strava_authenticated(session_id):
 
 def refresh_strava_token(session_id):
     stravaTokens = get_user_tokens(session_id)
-    print(stravaTokens.user_id)
     response = post("https://www.strava.com/oauth/token",data={
         'grant_type':'refresh_token',
         'refresh_token':stravaTokens.refresh_token,

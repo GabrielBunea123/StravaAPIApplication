@@ -78,7 +78,7 @@ const Sidebar = () => {
                                 <a class="nav-link navbar-brand" href={`/create-food/${userInfo.id}`}>New recipe</a>
                             </li> */}
                             <li class="nav-item active item-nav-space">
-                                <a style={{fontWeight:"bold"}} href={`/set-kcal-goal/${userInfo.id}`} class="nav-link navbar-brand side-item-font"><i class="fas fa-cog"></i></a>
+                                <a style={{fontWeight:"bold"}} href={`/set-kcal-goal/${userInfo.id}`} class="nav-link navbar-brand side-item-font"><i class="fas fa-cog"></i> Settings</a>
                             </li>
                         </ul>
                     </form>

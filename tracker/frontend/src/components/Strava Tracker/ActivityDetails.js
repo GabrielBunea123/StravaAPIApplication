@@ -167,7 +167,7 @@ const ActivityDetails = (props) => {
                     </div>
                 </div>
                 <h2 style={{paddingTop:30,paddingBottom:30,fontWeight:'bold',color:"#008A8A"}}>{hasMap==true?"Your workout map":"This workout has no map"}</h2>
-                {hasMap==true?<div style={{height: 700,margin:20}} ref={mapContainer} className="map-container"/>:null}
+                {hasMap==true?<div style={{height: 700,margin:20,borderRadius:20}} ref={mapContainer} className="map-container"/>:null}
                 
             </div>
         </Grid>

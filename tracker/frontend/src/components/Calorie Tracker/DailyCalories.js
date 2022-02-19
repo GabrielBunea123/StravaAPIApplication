@@ -6,6 +6,7 @@ import { RowsIcon } from '@primer/octicons-react';
 import ProductsDaily from './ProductsDaily';
 import ModalEditFood from './ModalEditFood';
 import TablesDailyFood from './TablesDailyFood';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -28,13 +29,13 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const DailyCalories = (props) => {
-
     const user_id = props.match.params.user_id
     // var currentDate = props.match.params.date
 
 
     const [stravaAuthenticated,setStravaAuthenticated] = useState(false)
     const [dailyFood,setDailyFood] = useState([])
+    const [allUserFood,setAllUserFood] = useState([])
     const [currentDate,setCurrentDate] = useState(props.match.params.date)
 
     //FOR EDIT FUNCTION
@@ -75,7 +76,57 @@ const DailyCalories = (props) => {
             }
         })
     }
-    function getUserDailyFood(){
+    function getAllDailyFood(){//get all daily food from all days
+        const today = new Date()
+        var day1=0,day2=0,day3=0,day4=0,day5=0,day6=0,day7=0;
+        const requestOptions = {
+            method:"POST",
+            headers:{"Content-Type": "application/json"},
+            body:JSON.stringify({
+                creator:user_id,
+            })
+        }
+        fetch("/api/get-all-daily-food",requestOptions)
+        .then((res)=>res.json())
+        .then((data)=>{//filtering data for the chart analysis
+            data.map((item,index)=>{
+                const newDate = new Date(item.date)
+                if(newDate.getDate()==today.getDate()-6){
+                    day1 = day1+item.kcal
+                }
+                else if(newDate.getDate()==today.getDate()-5){
+                    day2 = day2+item.kcal
+                }
+                else if(newDate.getDate()==today.getDate()-4){
+                    day3 = day3+item.kcal
+                }
+                else if(newDate.getDate()==today.getDate()-3){
+                    day4 = day4+item.kcal
+                }
+                else if(newDate.getDate()==today.getDate()-2){
+                    day5 = day5+item.kcal
+                }
+                else if(newDate.getDate()==today.getDate()-1){
+                    day6 = day6+item.kcal
+                }
+                else if(newDate.getDate()==today.getDate()){
+                    day7=day7+item.kcal
+                }
+            })
+            var chartData=[
+                {name:"6 days ago",kcal:day1},
+                {name:"5 days ago",kcal:day2},
+                {name:"4 days ago",kcal:day3},
+                {name:"3 days ago",kcal:day4},
+                {name:"2 days ago",kcal:day5},
+                {name:"1 day ago",kcal:day6},
+                {name:"Today",kcal:day7},
+            ]
+            setAllUserFood(chartData)
+        })
+
+    }
+    function getUserDailyFood(){//get daily food from current date
         const requestOptions = {
             method:"POST",
             headers:{"Content-Type": "application/json"},
@@ -197,9 +248,9 @@ const DailyCalories = (props) => {
                         edit={editButtonClick} 
                         delete={deleteDailyFood} 
                         name={row.product_name} 
-                        quantity={row.quantity} 
-                        kcal={row.kcal}
-                        proteins={row.proteins} 
+                        quantity={row.quantity.toFixed(2)} 
+                        kcal={row.kcal.toFixed(2)}
+                        proteins={row.proteins.toFixed(2)} 
                         product_id={row.product_id} 
                         id={row.id}
                         meal="breakfast" />):null}
@@ -225,9 +276,9 @@ const DailyCalories = (props) => {
                         edit={editButtonClick} 
                         delete={deleteDailyFood} 
                         name={row.product_name} 
-                        quantity={row.quantity} 
-                        kcal={row.kcal} 
-                        proteins={row.proteins} 
+                        quantity={row.quantity.toFixed(2)} 
+                        kcal={row.kcal.toFixed(2)} 
+                        proteins={row.proteins.toFixed(2)} 
                         product_id={row.product_id} 
                         id={row.id}
                         meal="lunch" />):null}
@@ -252,9 +303,9 @@ const DailyCalories = (props) => {
                         edit={editButtonClick} 
                         delete={deleteDailyFood}
                          name={row.product_name} 
-                         quantity={row.quantity} 
-                         kcal={row.kcal} 
-                         proteins={row.proteins} 
+                         quantity={row.quantity.toFixed(2)} 
+                         kcal={row.kcal.toFixed(2)} 
+                         proteins={row.proteins.toFixed(2)} 
                          product_id={row.product_id} 
                          id={row.id} 
                          meal="dinner" />):null}
@@ -279,9 +330,9 @@ const DailyCalories = (props) => {
                         edit={editButtonClick}
                         delete={deleteDailyFood} 
                         name={row.product_name} 
-                        quantity={row.quantity} 
-                        kcal={row.kcal} 
-                        proteins={row.proteins}
+                        quantity={row.quantity.toFixed(2)} 
+                        kcal={row.kcal.toFixed(2)} 
+                        proteins={row.proteins.toFixed(2)}
                         product_id={row.product_id} 
                         id={row.id} 
                         meal="snack" />):null}
@@ -295,7 +346,7 @@ const DailyCalories = (props) => {
     useEffect(()=>{
         authenticateStrava()
         getUserDailyFood()
-        // getKcalGoal()
+        getAllDailyFood()
     },[])
     return (
         <Grid spacing={1} className="all-container">
@@ -335,19 +386,30 @@ const DailyCalories = (props) => {
                         </thead>
                         <tbody>
                             <tr>
-                                <td>{totalKcal}</td>
-                                <td>{totalProteins} (g)</td>
-                                <td>{totalCarbs}</td>
-                                <td>{totalFats} (g)</td>
-                                <td>{totalSugar} (g)</td>
-                                <td>{totalFibers} (g)</td>
+                                <td>{totalKcal.toFixed(2)}</td>
+                                <td>{totalProteins.toFixed(2)} (g)</td>
+                                <td>{totalCarbs.toFixed(2)} (g)</td>
+                                <td>{totalFats.toFixed(2)} (g)</td>
+                                <td>{totalSugar.toFixed(2)} (g)</td>
+                                <td>{totalFibers.toFixed(2)} (g)</td>
                             </tr>
                         </tbody>
                         
                         
                     </table>
                 </div>
-                <h3 style={{paddingTop:30,paddingBottom:50,fontWeight:'bold',color:"#008A8A"}}>Remaining kcal: {kcalGoal-totalKcal}</h3>
+                <h3 style={{paddingTop:30,paddingBottom:50,fontWeight:'bold',color:"#008A8A"}}>Remaining kcal: {(kcalGoal-totalKcal).toFixed(2)}</h3>
+
+                <h3 style={{paddingTop:30,paddingBottom:50,fontWeight:'bold'}}>Your food analysis for the last week</h3>
+                <ResponsiveContainer style={{width:"100%"}} height={600}>
+                    <LineChart width={600} height={300} data={allUserFood} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
+                        <Line type="monotone" dataKey="kcal" stroke="#8884d8" />
+                        <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+                        <XAxis dataKey="name" />
+                        <YAxis />
+                        <Tooltip />
+                    </LineChart>
+                </ResponsiveContainer>
             </div>
         </Grid>
     )

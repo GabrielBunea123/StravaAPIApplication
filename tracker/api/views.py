@@ -87,7 +87,7 @@ class AddDailyFood(APIView):
             return Response(AddFoodSerializer(user_food).data,status=status.HTTP_201_CREATED)
         return Response({'Bad request':"Try again"},status = status.HTTP_400_BAD_REQUEST)
 
-class GetDailyUserFood(APIView):
+class GetDailyUserFood(APIView):#gets daily food from current day
     serializer_class = GetDailyFoodSerializer
     def post(self,request,format=None):
         serializer = self.serializer_class(data = request.data)
@@ -99,7 +99,20 @@ class GetDailyUserFood(APIView):
                 data = DailyFoodSerializer(daily_food,many = True).data
                 return Response(data,status= status.HTTP_200_OK)
             return Response({"Not found":"No food added"},status=status.HTTP_404_NOT_FOUND)
-        return Response({'Bad request':"No recent food"},status = status.HTTP_400_BAD_REQUEST)
+        return Response({'Bad request':"Something went wrong"},status = status.HTTP_400_BAD_REQUEST)
+
+class GetAllDailyFood(APIView):#gets daily food fromm all days
+    serializer_class = GetAllDailyFoodSerializer
+    def post(self,request,format=None):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            creator = serializer.data.get('creator')
+            daily_food = UserDailyFood.objects.filter(creator = creator)
+            if daily_food.exists():
+                data = DailyFoodSerializer(daily_food,many=True).data
+                return Response(data,status=status.HTTP_200_OK)
+            return Response({"Not found":"No food"},status=status.HTTP_404_NOT_FOUND)
+        return Response({"Bad request":"Something went wrong"},status=status.HTTP_400_BAD_REQUEST)
 
 class EditDailyFood(APIView):
     serializer_class = EditDailyFoodSerializer
@@ -142,7 +155,6 @@ class DeleteDailyFood(APIView):
             UserDailyFood.objects.filter(creator = creator,date=date,product_id=product_id,pk=daily_food_id,meal=meal).delete()
 
             return Response({"Delete request":"The item has been deleted"},status=status.HTTP_200_OK)
-        print(serializer.errors)
         return Response({"Bad request":"Erro occured"},status=status.HTTP_400_BAD_REQUEST)
 
 #RECENT FOOD
@@ -170,7 +182,6 @@ class AddRecentUserFoods(APIView):
 
                 return Response(RecentUserFoodsSerializer(food).data,status=status.HTTP_201_CREATED)
             return Response({'All good':"This already exists in recent"},status=status.HTTP_200_OK)
-        print(serializer.errors)
         return Response({'Bad request':"Try again"},status = status.HTTP_400_BAD_REQUEST)
 
 class GetRecentUserFoods(APIView):

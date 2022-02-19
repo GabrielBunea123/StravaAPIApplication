@@ -7,6 +7,7 @@ urlpatterns = [
     path('add-product',AddProduct.as_view()),
     path('add-daily-food',AddDailyFood.as_view()),
     path('get-daily-food',GetDailyUserFood.as_view()),
+    path('get-all-daily-food',GetAllDailyFood.as_view()),
     path('add-recent-food',AddRecentUserFoods.as_view()),
     path('get-recent-food',GetRecentUserFoods.as_view()),
     path('product-details',ProductDetails.as_view()),

@@ -137,7 +137,7 @@ const Profile = () => {
                                     <div className="d-flex flex-sm-row flex-column align-content-center">
                                         <div class="d-flex flex-column bd-highlight mb-3 profile-recent-activities-followers">
                                             <div className="mr-auto p-2"><Typography variant="h6">Followers</Typography></div>
-                                            <div className="mr-auto p-2"><Typography variant="h6">{userInfo.follower_count}</Typography></div>
+                                            <div className="mr-auto p-2"><Typography variant="h6">{userInfo.followers}</Typography></div>
                                         </div>
                                         <div class="d-flex flex-column bd-highlight mb-3 profile-recent-activities">
                                                 <div className="mr-auto p-2"><Typography variant="h6">Activities</Typography></div>
@@ -188,7 +188,7 @@ const Profile = () => {
                                     </thead>
                                 </table>
                                 </div>
-                                <a href={`/activity-details/${activities.length>0?activities[0].id:"#"}`} class="btn" style={{backgroundColor:"#00ADAD",color:"white"}}>Activity details</a>
+                                <a href={`/activity-details/${activities.length>0?activities[0].activity_id:"#"}`} class="btn" style={{backgroundColor:"#00ADAD",color:"white"}}>Activity details</a>
                                 </div>
                         </div>
                     </div>

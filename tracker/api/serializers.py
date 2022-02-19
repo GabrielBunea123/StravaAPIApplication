@@ -53,6 +53,9 @@ class GetDailyFoodSerializer(serializers.Serializer):
     creator = serializers.CharField()
     date = serializers.CharField()
 
+class GetAllDailyFoodSerializer(serializers.Serializer):
+    creator = serializers.CharField()
+
 
 #RECENT FOOD
 class RecentUserFoodsSerializer(serializers.ModelSerializer):
