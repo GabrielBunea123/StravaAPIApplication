@@ -1,5 +1,5 @@
 import React from 'react'
-import {Grid} from '@material-ui/core'
+import { Grid } from '@material-ui/core'
 
 const Footer = () => {
     return (
@@ -7,10 +7,10 @@ const Footer = () => {
             <footer className="footer-container navbar">
                 <div className="container">
                     <div>
-                        <h3 style={{color:'white',fontWeight:"bold",marginTop:10}}>Eat&Track</h3>
+                        <h3 style={{ color: 'white', fontWeight: "bold", marginTop: 10 }}>Eat&Track</h3>
                     </div>
                     <div>
-                        <div style={{color:'white',fontWeight:"bold",paddingTop:10}}>
+                        <div style={{ color: 'white', fontWeight: "bold", paddingTop: 10 }}>
                             <div>This website helps you track both your calories and your workouts. It uses the Strava api to track all your daily activities.</div>
                         </div>
                     </div>

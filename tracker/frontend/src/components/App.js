@@ -1,5 +1,5 @@
-import React,{ useRef, useEffect, useState } from 'react'
-import {BrowserRouter as Router,Switch,Route,Link,Redirect,} from "react-router-dom";
+import React, { useState } from 'react'
+import { BrowserRouter as Router, Switch, Route, } from "react-router-dom";
 import Home from './Strava Tracker/Home';
 import Sidebar from './Sidebar'
 import Profile from './Strava Tracker/Profile';
@@ -14,12 +14,10 @@ import SetKcalGoal from './Calorie Tracker/SetKcalGoal';
 import Footer from './Footer';
 
 const App = () => {
-    
-    const [userInfo,setUserInfo] = useState([])
- 
+
     return (
         <Router>
-            <Sidebar/>
+            <Sidebar />
             <Switch>
                 <Route exact path="/" component={Home}></Route>
                 <Route exact path="/profile" component={Profile}></Route>
@@ -32,7 +30,7 @@ const App = () => {
                 <Route exact path="/create-food/:user_id" component={CreateFood}></Route>
                 <Route exact path="/set-kcal-goal/:user_id" component={SetKcalGoal}></Route>
             </Switch>
-            <Footer/>
+            <Footer />
         </Router>
     )
 }

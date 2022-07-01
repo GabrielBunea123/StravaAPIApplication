@@ -2,24 +2,19 @@ import React from 'react'
 
 const OutsideSearch = (props) => {
     return (
-        <div className="card" style={{marginBottom:20,backgroundColor:"#00737B",borderRadius:30,padding:10,color:"white"}}>
-            <div style={{marginTop:10}} class="d-flex justify-content-between">
-                <div class="p-2">
-                    <h5>{props.product}</h5>
+        <ol class="list-group">
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="ms-2 me-auto">
+                    <div class="fw-bold">{props.product}</div>
+                    {props.kcal} cal per serving
                 </div>
-                <div class="p-2">
-                    <h6>{props.quantity} (g)</h6>
-                </div>
-                <div class="p-2">
-                    <h6>{props.kcal} kcal</h6>
-                </div>
-                <div class="p-2">
-                    <button onClick={()=>{props.setAddProductId(props.product_id);props.getMacros(props.product_id)}} type="button" class="btn" style={{backgroundColor:"#00ADAD",color:"white"}} data-bs-toggle="modal" data-bs-target="#exampleModal">+</button>
+                {/* <span class="badge bg-primary rounded-pill">14</span> */}
+                <button onClick={() => { props.setAddProductId(props.product_id); props.getMacros(props.product_id) }} className="btn" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fa-solid fa-plus"></i></button>
 
-                    <div style={{color:"black"}} class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        {/* OPEN THE MODAL TO SET THE QUANTITY */}
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
+                <div style={{ color: "black" }} class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    {/* OPEN THE MODAL TO SET THE QUANTITY */}
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
                             <div class="modal-header">
                                 <div className="table-responsive card">
                                     <table class="table table-striped">
@@ -36,17 +31,17 @@ const OutsideSearch = (props) => {
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td>{props.macrosDetails.length>0?props.macrosDetails[0].fields.nf_serving_weight_grams:null} (g)</td>
-                                                <td>{props.macrosDetails.length>0?props.macrosDetails[0].fields.nf_calories:null}</td>
-                                                <td>{props.macrosDetails.length>0?props.macrosDetails[0].fields.nf_protein:null} (g)</td>
-                                                <td>{props.macrosDetails.length>0?props.macrosDetails[0].fields.nf_total_carbohydrate:null} (g)</td>
-                                                <td>{props.macrosDetails.length>0?props.macrosDetails[0].fields.nf_fats:null} (g)</td>
-                                                <td>{props.macrosDetails.length>0?props.macrosDetails[0].fields.nf_sugars:null} (g)</td>
-                                                <td>{props.macrosDetails.length>0?props.macrosDetails[0].fields.nf_dietary_fibe:null} (g)</td>
+                                                <td>{props.macrosDetails.length > 0 ? props.macrosDetails[0].grams : null} (g)</td>
+                                                <td>{props.macrosDetails.length > 0 ? props.macrosDetails[0].kcal : null}</td>
+                                                <td>{props.macrosDetails.length > 0 ? props.macrosDetails[0].proteins : null} (g)</td>
+                                                <td>{props.macrosDetails.length > 0 ? props.macrosDetails[0].carbs : null} (g)</td>
+                                                <td>{props.macrosDetails.length > 0 ? props.macrosDetails[0].fats : null} (g)</td>
+                                                <td>{props.macrosDetails.length > 0 ? props.macrosDetails[0].sugars : null} (g)</td>
+                                                <td>{props.macrosDetails.length > 0 ? props.macrosDetails[0].fibers : null} (g)</td>
                                             </tr>
                                         </tbody>
-                                        
-                                        
+
+
                                     </table>
                                 </div>
                             </div>
@@ -59,15 +54,16 @@ const OutsideSearch = (props) => {
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <a href={`/daily-calories/${props.user_id}/${props.currentDate}`} onClick={()=>{props.addDailyFood()}} type="button" class="btn" style={{backgroundColor:"#00ADAD",color:"white"}}>+ Add</a>
-                            </div>
+                                <a href={`/daily-calories/${props.user_id}/${props.currentDate}`} onClick={() => { props.addDailyFood() }} type="button" class="btn" style={{ backgroundColor: "#00ADAD", color: "white" }}>+ Add</a>
                             </div>
                         </div>
-                        {/* END OF THE MODAL */}
                     </div>
+                    {/* END OF THE MODAL */}
                 </div>
-            </div>
-        </div>
+
+            </li>
+
+        </ol>
     )
 }
 

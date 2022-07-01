@@ -11,7 +11,7 @@ from datetime import datetime
 # Create your views here.
 class AuthURL(APIView):
     def get(self,request,format=None):
-        scopes = 'read,read_all,profile:read_all,profile:write,activity:read,activity:read_all,activity:write'
+        scopes = 'read,read_all,profile:read_all,profile:write,activity:read,activity:read_all,activity:write' #initialize the scopes of the user and redirect the user to the strava authentication page
         url = Request('GET', 'https://www.strava.com/oauth/authorize', params={
             'scope': scopes,
             'response_type': 'code',
@@ -25,7 +25,7 @@ def strava_callback(request,format=None):
     code = request.GET.get('code')
     error = request.GET.get('error')
 
-    response = post('https://www.strava.com/oauth/token', data={
+    response = post('https://www.strava.com/oauth/token', data={#post a request with the user's credentials to get access to the api
         'grant_type': 'authorization_code',
         'code': code,
         'client_id': settings.CLIENT_ID,
@@ -44,19 +44,19 @@ def strava_callback(request,format=None):
     if not request.session.exists(request.session.session_key):
         request.session.create()
 
-    update_or_create_user_tokens(request.session.session_key, access_token, user_id, token_type, expires_in, refresh_token)
+    update_or_create_user_tokens(request.session.session_key, access_token, user_id, token_type, expires_in, refresh_token)#from the utils.py file, update or create an authentication token
 
     return redirect('frontend:home')
 
 
 class IsAuthenticated(APIView):
     def get(self,request):
-        is_authenticated = is_strava_authenticated(self.request.session.session_key)
+        is_authenticated = is_strava_authenticated(self.request.session.session_key)#check if the user is authenticated
         return Response({'status':is_authenticated},status=status.HTTP_200_OK)
 
-class AuthenticatedUser(APIView):
+class AuthenticatedUser(APIView):#get user data
     def get(self,request):
-        is_authenticated = is_strava_authenticated(self.request.session.session_key)
+        is_authenticated = is_strava_authenticated(self.request.session.session_key) #from utils.py check if there is a user token
         if is_authenticated:
             user = StravaToken.objects.get(user= self.request.session.session_key)
 
@@ -96,7 +96,7 @@ class AuthenticatedUser(APIView):
             return Response(UserDetailsSerializer(userDetails).data,status=status.HTTP_200_OK)
         return Response({'url':is_authenticated},status=status.HTTP_404_NOT_FOUND)
 
-class GetUserStats(APIView):
+class GetUserStats(APIView):#user strava stats like:running, riding etc
     def get(self,request,format=None):
         user = StravaToken.objects.get(user= self.request.session.session_key)
 
@@ -140,7 +140,7 @@ class GetUserStats(APIView):
 
         return Response(UserStatsSerializer(userStats[0]).data,status=status.HTTP_200_OK)
 
-class CreateActivity(APIView):
+class CreateActivity(APIView): #create a manual activity
     serializer_class = CreateActivitySerializer
     def post(self,request,format=None):
         serializer = self.serializer_class(data=request.data)
@@ -163,7 +163,7 @@ class CreateActivity(APIView):
             return Response(response, status=status.HTTP_201_CREATED)
         return Response({"Bad request":"Try again"},status=status.HTTP_400_BAD_REQUEST)
 
-class GetStravaActivities(APIView):
+class GetStravaActivities(APIView): #get all the activities
     serializer_class = GetAllActivitiesSerializer
     def get(self,request,format=None):
         user = StravaToken.objects.get(user= self.request.session.session_key)
@@ -189,7 +189,7 @@ class GetStravaActivities(APIView):
 
         return Response(GetAllActivitiesSerializer(allActivities,many = True).data,status=status.HTTP_200_OK)
 
-class GetOneStravaActivity(APIView):
+class GetOneStravaActivity(APIView): #get activity details
     serializer_class = GetOneStravaActivitySerializer
     def post(self,request,format=None):
         serializer=self.serializer_class(data=request.data)
@@ -205,7 +205,7 @@ class GetOneStravaActivity(APIView):
         return Response({"Not found":"The activity doesn't exist"},status=status.HTTP_404_NOT_FOUND)
 
 
-class UpdateActivity(APIView):
+class UpdateActivity(APIView):#update the activity
     serializer_class = GetActivitySerializer
     def put(self,request,format=None):
         serializer = self.serializer_class(data=request.data)
@@ -223,7 +223,7 @@ class UpdateActivity(APIView):
             return Response(response,status=status.HTTP_200_OK)
         return Response({"Bad request":"Try again"},status=status.HTTP_400_BAD_REQUEST)
 
-class GetRoute(APIView):
+class GetRoute(APIView):#get route(not in use)
     serializer_class = GetRouteSerializer
     def post(self,request,format=None):
         serializer=self.serializer_class(data=request.data)

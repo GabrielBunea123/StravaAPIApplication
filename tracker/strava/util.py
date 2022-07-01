@@ -10,7 +10,7 @@ BASE_URL = "https://www.strava.com/api/v3/athlete/"
 def get_user_tokens(session_id):
     user_tokens = StravaToken.objects.filter(user = session_id)
     if user_tokens.exists():
-        return user_tokens[0]
+        return user_tokens[0]#every user has only one token
     return None
 
 def get_user_details(user_id,username,first_name,last_name,city,country,sex,premium_account,weight,profile_pic):
@@ -38,28 +38,28 @@ def update_or_create_user_tokens(session_id,access_token,user_id,token_type,expi
     tokens = get_user_tokens(session_id)
     expires_in = timezone.now() + timedelta(seconds=expires_in)
     
-    if tokens:
+    if tokens:#if a token already exists, just update it
         tokens.access_token =access_token
         tokens.token_type = token_type
         tokens.user_id= user_id
         tokens.expires_in = expires_in
         tokens.refresh_token = refresh_token
         tokens.save(update_fields=['access_token','token_type','expires_in','refresh_token'])
-    else:
+    else: #if there is no token, create one
         tokens = StravaToken(user = session_id,access_token=access_token,user_id=user_id,refresh_token=refresh_token,token_type=token_type,expires_in=expires_in)
         tokens.save()
 
 def is_strava_authenticated(session_id):
-    tokens = get_user_tokens(session_id)
+    tokens = get_user_tokens(session_id)#check if the user has tokens
     if tokens:
         expiry=tokens.expires_in
 
         if expiry<=timezone.now():
-            refresh_strava_token(session_id)
+            refresh_strava_token(session_id) #refresh the token if it expired
         return True
     return False
 
-def refresh_strava_token(session_id):
+def refresh_strava_token(session_id): #in case the token exists but it expired, refresh it
     stravaTokens = get_user_tokens(session_id)
     response = post("https://www.strava.com/oauth/token",data={
         'grant_type':'refresh_token',

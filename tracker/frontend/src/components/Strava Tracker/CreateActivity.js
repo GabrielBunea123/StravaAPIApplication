@@ -1,15 +1,15 @@
-import React,{useState} from 'react'
-import {Grid,Button,Typography,TextField,FormControl,Menu,MenuItem} from '@material-ui/core'
+import React, { useState } from 'react'
+import { Grid, Button, Typography, TextField, FormControl, Menu, MenuItem } from '@material-ui/core'
 
 
 const activity_types = [
     {
         value: 'Run',
-        label:"Run"
+        label: "Run"
     },
     {
         value: 'Swim',
-        label:'Swim'
+        label: 'Swim'
     },
     {
         value: 'Hike',
@@ -17,189 +17,186 @@ const activity_types = [
     },
     {
         value: 'Walk',
-        label:"Walk"
+        label: "Walk"
     },
     {
-        value:"AlpineSki",
-        label:"Alpine Ski"
+        value: "AlpineSki",
+        label: "Alpine Ski"
     },
     {
-        value:"BackcountrySki",
-        label:'Backcountry Ski'
-    },
-    {   
-        value:"Canoeing",
-        label:"Canoe",
+        value: "BackcountrySki",
+        label: 'Backcountry Ski'
     },
     {
-        value:"Crossfit",
-        label:"Crossfit"
+        value: "Canoeing",
+        label: "Canoe",
     },
     {
-        value:'EBikeRide',
-        label:'E-Bike Ride',
+        value: "Crossfit",
+        label: "Crossfit"
     },
     {
-        value:'Elliptical',
-        label:"Elliptical"
+        value: 'EBikeRide',
+        label: 'E-Bike Ride',
     },
     {
-        value:'Handcycle',
-        label:"Handcycle"
+        value: 'Elliptical',
+        label: "Elliptical"
     },
     {
-        value:'IceSkate',
-        label:"Ice Skate"
+        value: 'Handcycle',
+        label: "Handcycle"
     },
     {
-        value:'InlineSkate',
-        label:"Inline Skate"
+        value: 'IceSkate',
+        label: "Ice Skate"
     },
     {
-        value:'Kayaking',
-        label:"Kayaking"
+        value: 'InlineSkate',
+        label: "Inline Skate"
     },
     {
-        value:'Kitesurf',
-        label:"Kitesurf"
+        value: 'Kayaking',
+        label: "Kayaking"
     },
     {
-        value:'NordicSki',
-        label:"Nordic Ski"
+        value: 'Kitesurf',
+        label: "Kitesurf"
     },
     {
-        value:'RockClimbing',
-        label:"Rock Climbing"
+        value: 'NordicSki',
+        label: "Nordic Ski"
     },
     {
-        value:'RollerSki',
-        label:"Roller Ski"
+        value: 'RockClimbing',
+        label: "Rock Climbing"
     },
     {
-        value:'Rowing',
-        label:"Rowing"
+        value: 'RollerSki',
+        label: "Roller Ski"
     },
     {
-        value:'Snowboard',
-        label:"Snowboard"
+        value: 'Rowing',
+        label: "Rowing"
     },
     {
-        value:'Snowshoe',
-        label:"Snowshoe"
+        value: 'Snowboard',
+        label: "Snowboard"
     },
     {
-        value:'StairStepper',
-        label:"Stair-Stepper"
+        value: 'Snowshoe',
+        label: "Snowshoe"
     },
     {
-        value:'StandUpPaddling',
-        label:"Stand Up Paddling"
+        value: 'StairStepper',
+        label: "Stair-Stepper"
     },
     {
-        value:'Ride',
-        label:"Ride"
+        value: 'StandUpPaddling',
+        label: "Stand Up Paddling"
     },
     {
-        value:'Surfing',
-        label:"Surfing"
+        value: 'Ride',
+        label: "Ride"
     },
     {
-        value:'Velomobile',
-        label:"Velomobile"
+        value: 'Surfing',
+        label: "Surfing"
     },
     {
-        value:'VirtualRide',
-        label:"Virtual Ride"
+        value: 'Velomobile',
+        label: "Velomobile"
     },
     {
-        value:'VirtualRun',
-        label:"Virtual Run"
+        value: 'VirtualRide',
+        label: "Virtual Ride"
     },
     {
-        value:'WeightTraining',
-        label:"Weight Training"
+        value: 'VirtualRun',
+        label: "Virtual Run"
     },
     {
-        value:'Wheelchair',
-        label:"Wheelchair"
+        value: 'WeightTraining',
+        label: "Weight Training"
     },
     {
-        value:'Windsurf',
-        label:"Windsurf"
+        value: 'Wheelchair',
+        label: "Wheelchair"
     },
     {
-        value:'Workout',
-        label:"Workout"
+        value: 'Windsurf',
+        label: "Windsurf"
     },
     {
-        value:'Yoga',
-        label:"Yoga"
+        value: 'Workout',
+        label: "Workout"
+    },
+    {
+        value: 'Yoga',
+        label: "Yoga"
     },
 
 
 
-  ];
+];
 
 
 const CreateActivity = () => {
 
+    const [name, setName] = useState('')
+    const [activity_type, setActivity_Type] = useState('')
+    const [duration, setDuration] = useState(0)
+    const [description, setDescription] = useState("")
+    const [distance, setDistance] = useState(0)
 
-    
-
-    const [name,setName]=useState('')
-    const [activity_type,setActivity_Type] = useState('')
-    const [duration,setDuration] = useState(0)
-    const [description,setDescription] = useState("")
-    const [distance,setDistance] = useState(0)
-
-    function handleNameChange(event){
+    function handleNameChange(event) {
         setName(event.target.value)
     }
-    function handleActivity_TypeChange(event){
+    function handleActivity_TypeChange(event) {
         setActivity_Type(event.target.value)
     }
-    function handleDurationChange(event){
+    function handleDurationChange(event) {
         setDuration(event.target.value)
     }
-    function handleDescriptionChange(event){
+    function handleDescriptionChange(event) {
         setDescription(event.target.value)
     }
-    function handleDistanceChange(event){
+    function handleDistanceChange(event) {
         setDistance(event.target.value)
     }
-    function createActivity(){
+    function createActivity() {
         const requestOptions = {
-            method:"POST",
-            headers:{'Content-Type': 'application/json'},
-            body:JSON.stringify({
-                name:name,
-                activity_type:activity_type,
-                elapsed_time:duration,
-                description:description,
-                distance:distance
+            method: "POST",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                name: name,
+                activity_type: activity_type,
+                elapsed_time: duration,
+                description: description,
+                distance: distance
             })
         }
-        fetch("/strava/create-activity",requestOptions)
-        .then((res)=>res.json())
-        .then((data)=>console.log(data))
+        fetch("/strava/create-activity", requestOptions)
+            .then((res) => res.json())
+            .then((data) => console.log(data))
     }
 
-    
+
     return (
         <Grid container spacing={1} className="all-container">
             <div className="container">
-                <h3 style={{paddingTop:30,paddingBottom:30}}>Create new Strava activity</h3>
+                <h3 style={{ paddingTop: 30, paddingBottom: 30 }}>Create new Strava activity</h3>
                 <div class="card">
                     <div class="card-header">
                         Details
                     </div>
                     <div class="card-body">
-                        <div style={{paddingBottom:20}} className="form-group">
+                        <div style={{ paddingBottom: 20 }} className="form-group">
                             <label>Name</label>
                             <input onChange={handleNameChange} class="form-control" placeholder="Name"></input>
                             <small class="form-text text-muted">The name of the activity</small>
                         </div>
-                        <div style={{paddingBottom:20}} class="form-group">
+                        <div style={{ paddingBottom: 20 }} class="form-group">
                             <label for="exampleFormControlSelect1">Select the type of activity</label>
                             <select onChange={handleActivity_TypeChange} class="form-control">
                                 {activity_types.map((option) => (
@@ -207,24 +204,24 @@ const CreateActivity = () => {
                                 ))}
                             </select>
                         </div>
-                        <div style={{paddingBottom:20}} className="form-group">
+                        <div style={{ paddingBottom: 20 }} className="form-group">
                             <label>Duration</label>
                             <input onChange={handleDurationChange} type="number" class="form-control" placeholder="Seconds"></input>
                             <small class="form-text text-muted">The duration of the workout</small>
                         </div>
-                        <div style={{paddingBottom:20}} className="form-group">
+                        <div style={{ paddingBottom: 20 }} className="form-group">
                             <label>Description</label>
                             <input onChange={handleDescriptionChange} class="form-control" placeholder="Description"></input>
                             <small class="form-text text-muted">Describe the workout</small>
                         </div>
-                        <div style={{paddingBottom:20}} className="form-group">
+                        <div style={{ paddingBottom: 20 }} className="form-group">
                             <label>Distance</label>
                             <input onChange={handleDistanceChange} type="number" class="form-control" placeholder="Meters"></input>
                             <small class="form-text text-muted">The distance of the workout</small>
                         </div>
 
-                        <Grid item xs={12} align="center">
-                            <a style={{textDecoration:'none'}} href={`/activities`}><button className="btn" onClick={createActivity} style={{backgroundColor:"#00ADAD",color:"white",marginTop:30}}>Create</button></a>    
+                        <Grid item xs={12}>
+                            <a style={{ textDecoration: 'none' }} href={`/activities`}><button className="btn" onClick={createActivity} style={{ backgroundColor: "#00ADAD", color: "white", marginTop: 30 }}>Create</button></a>
                         </Grid>
                     </div>
                 </div>

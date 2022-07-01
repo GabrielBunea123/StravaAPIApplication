@@ -12,7 +12,7 @@ from datetime import date
 class GetProducts(APIView):
     serializer_class = AddProductSerializer
     def get(self,request):
-        all_food = Products.objects.all()
+        all_food = Products.objects.all() #get all the products stored in the database and serialize them
         data = AddProductSerializer(all_food,many = True).data
         return Response(data,status= status.HTTP_200_OK)
         
@@ -22,7 +22,7 @@ class AddProduct(APIView):
 
         serializer = self.serializer_class(data=request.data)
         
-        if serializer.is_valid():
+        if serializer.is_valid(): #add a new product
             product_name = serializer.data.get('product')
             quantity=serializer.data.get('quantity')
             kcal=serializer.data.get('kcal')
@@ -44,7 +44,7 @@ class ProductDetails(APIView):
         serializer = self.serializer_class(data = request.data)
         if serializer.is_valid():
             product_id = serializer.data.get('product_id')
-            product_details = Products.objects.filter(id=product_id)
+            product_details = Products.objects.filter(id=product_id) # get product by id
             if product_details.exists():
                 return Response(AddProductSerializer(product_details[0]).data,status=status.HTTP_200_OK)
             return Response({"NOT FOUND":"Something went wrong"},status= status.HTTP_404_NOT_FOUND)
@@ -56,7 +56,7 @@ class SearchFood(APIView):
         serializer = self.serializer_class(data = request.data)
         if serializer.is_valid():
             product_name = serializer.data.get('product')
-            products = Products.objects.filter(product__icontains=product_name)
+            products = Products.objects.filter(product__icontains=product_name)#search a product by name
             if products:
                 data = AddProductSerializer(products,many = True).data
                 return Response(data,status= status.HTTP_200_OK)
@@ -68,7 +68,7 @@ class AddDailyFood(APIView):
     serializer_class = AddFoodSerializer
     def post(self,request,format=None):
         serializer = self.serializer_class(data = request.data)
-        if serializer.is_valid():
+        if serializer.is_valid():#new product to daily food
             creator = serializer.data.get('creator')
             meal = serializer.data.get('meal')
             product_name=serializer.data.get('product_name')
@@ -91,7 +91,7 @@ class GetDailyUserFood(APIView):#gets daily food from current day
     serializer_class = GetDailyFoodSerializer
     def post(self,request,format=None):
         serializer = self.serializer_class(data = request.data)
-        if serializer.is_valid():
+        if serializer.is_valid():#get all the user daily food from the current day
             creator = serializer.data.get('creator')
             date = serializer.data.get('date')
             daily_food = UserDailyFood.objects.filter(creator = creator,date=date)
@@ -118,7 +118,7 @@ class EditDailyFood(APIView):
     serializer_class = EditDailyFoodSerializer
     def put(self,request,format=None):
         serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
+        if serializer.is_valid(): #edit an existing daily food product
             quantity=serializer.data.get('quantity')
             product_id = serializer.data.get('product_id')
             daily_food_id=serializer.data.get('daily_food_id')

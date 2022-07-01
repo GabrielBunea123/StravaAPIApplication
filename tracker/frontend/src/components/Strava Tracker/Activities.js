@@ -1,23 +1,16 @@
-import React,{useState,useEffect} from 'react'
-import {Grid,Button,Typography,Card,CardActions,CardContent} from "@material-ui/core"
-import {makeStyles} from '@material-ui/core';
-const useStyles = makeStyles((theme) => ({
-    root1:{
-      flexGrow: 1,
-      margin:5
-    }
-   
-}));
+import React, { useState, useEffect } from 'react'
+import { Grid, Typography } from "@material-ui/core"
+import { makeStyles } from '@material-ui/core';
 
 
 const activity_types = [
     {
         value: 'Run',
-        label:"Run"
+        label: "Run"
     },
     {
         value: 'Swim',
-        label:'Swim'
+        label: 'Swim'
     },
     {
         value: 'Hike',
@@ -25,218 +18,216 @@ const activity_types = [
     },
     {
         value: 'Walk',
-        label:"Walk"
+        label: "Walk"
     },
     {
-        value:"AlpineSki",
-        label:"Alpine Ski"
+        value: "AlpineSki",
+        label: "Alpine Ski"
     },
     {
-        value:"BackcountrySki",
-        label:'Backcountry Ski'
-    },
-    {   
-        value:"Canoeing",
-        label:"Canoe",
+        value: "BackcountrySki",
+        label: 'Backcountry Ski'
     },
     {
-        value:"Crossfit",
-        label:"Crossfit"
+        value: "Canoeing",
+        label: "Canoe",
     },
     {
-        value:'EBikeRide',
-        label:'E-Bike Ride',
+        value: "Crossfit",
+        label: "Crossfit"
     },
     {
-        value:'Elliptical',
-        label:"Elliptical"
+        value: 'EBikeRide',
+        label: 'E-Bike Ride',
     },
     {
-        value:'Handcycle',
-        label:"Handcycle"
+        value: 'Elliptical',
+        label: "Elliptical"
     },
     {
-        value:'IceSkate',
-        label:"Ice Skate"
+        value: 'Handcycle',
+        label: "Handcycle"
     },
     {
-        value:'InlineSkate',
-        label:"Inline Skate"
+        value: 'IceSkate',
+        label: "Ice Skate"
     },
     {
-        value:'Kayaking',
-        label:"Kayaking"
+        value: 'InlineSkate',
+        label: "Inline Skate"
     },
     {
-        value:'Kitesurf',
-        label:"Kitesurf"
+        value: 'Kayaking',
+        label: "Kayaking"
     },
     {
-        value:'NordicSki',
-        label:"Nordic Ski"
+        value: 'Kitesurf',
+        label: "Kitesurf"
     },
     {
-        value:'RockClimbing',
-        label:"Rock Climbing"
+        value: 'NordicSki',
+        label: "Nordic Ski"
     },
     {
-        value:'RollerSki',
-        label:"Roller Ski"
+        value: 'RockClimbing',
+        label: "Rock Climbing"
     },
     {
-        value:'Rowing',
-        label:"Rowing"
+        value: 'RollerSki',
+        label: "Roller Ski"
     },
     {
-        value:'Snowboard',
-        label:"Snowboard"
+        value: 'Rowing',
+        label: "Rowing"
     },
     {
-        value:'Snowshoe',
-        label:"Snowshoe"
+        value: 'Snowboard',
+        label: "Snowboard"
     },
     {
-        value:'StairStepper',
-        label:"Stair-Stepper"
+        value: 'Snowshoe',
+        label: "Snowshoe"
     },
     {
-        value:'StandUpPaddling',
-        label:"Stand Up Paddling"
+        value: 'StairStepper',
+        label: "Stair-Stepper"
     },
     {
-        value:'Ride',
-        label:"Ride"
+        value: 'StandUpPaddling',
+        label: "Stand Up Paddling"
     },
     {
-        value:'Surfing',
-        label:"Surfing"
+        value: 'Ride',
+        label: "Ride"
     },
     {
-        value:'Velomobile',
-        label:"Velomobile"
+        value: 'Surfing',
+        label: "Surfing"
     },
     {
-        value:'VirtualRide',
-        label:"Virtual Ride"
+        value: 'Velomobile',
+        label: "Velomobile"
     },
     {
-        value:'VirtualRun',
-        label:"Virtual Run"
+        value: 'VirtualRide',
+        label: "Virtual Ride"
     },
     {
-        value:'WeightTraining',
-        label:"Weight Training"
+        value: 'VirtualRun',
+        label: "Virtual Run"
     },
     {
-        value:'Wheelchair',
-        label:"Wheelchair"
+        value: 'WeightTraining',
+        label: "Weight Training"
     },
     {
-        value:'Windsurf',
-        label:"Windsurf"
+        value: 'Wheelchair',
+        label: "Wheelchair"
     },
     {
-        value:'Workout',
-        label:"Workout"
+        value: 'Windsurf',
+        label: "Windsurf"
     },
     {
-        value:'Yoga',
-        label:"Yoga"
+        value: 'Workout',
+        label: "Workout"
+    },
+    {
+        value: 'Yoga',
+        label: "Yoga"
     },
 
 
 
 ];
 
-const Activities = (props) => {
+const Activities = () => {
 
-    const classes = useStyles()
+    const [activities, setActivities] = useState([])
+    const [filteredActivities, setFilteredActivities] = useState([])
+    const [filterName, setFilterName] = useState('')
+    const [filterType, setFilterType] = useState('none')
+    const [filterBool, setFilterBool] = useState(false)
+    const [stravaAuthenticated, setStravaAuthenticated] = useState(false)
 
-    const [activities,setActivities] = useState([])
-    const [filteredActivities,setFilteredActivities] = useState([])
-    const [filterName,setFilterName] = useState('')
-    const [filterType,setFilterType] = useState('none')
-    const [filterBool,setFilterBool] = useState(false)
-    const [stravaAuthenticated,setStravaAuthenticated] = useState(false)
-
-    function authenticateStrava(){
-        fetch('/strava/is_authenticated')
-        .then((res)=>res.json())
-        .then((data)=>{
-            setStravaAuthenticated(data.status)
-            if(!data.status){
-                fetch("/strava/get-auth-url")
-                .then((res)=>res.json())
-                .then((data)=>{
-                    window.location.replace(data.url)//redirect to the strava url
-                })
-            }
-        })
+    function authenticateStrava() {
+        fetch("/strava/is_authenticated")
+            .then((res) => res.json())
+            .then((data) => {
+                setStravaAuthenticated(data.status)
+                if (!data.status) {
+                    fetch("/strava/get-auth-url")
+                        .then((res) => res.json())
+                        .then((data) => {
+                            window.location.replace(data.url)//redirect to the strava url
+                        })
+                }
+            })
     }
 
-    const getStravaActivities=()=>{
+    const getStravaActivities = () => {
         fetch("/strava/get-strava-activities")
-        .then((res)=>res.json())
-        .then((data)=>{
-            console.log(data)
-            data.map((item)=>{
-                //from ISO 8601 format to normal format date
-                var date = new Date(item.start_date)
-                item.start_date = date.toLocaleString();
+            .then((res) => res.json())
+            .then((data) => {
+                console.log(data)
+                data.map((item) => {
+                    //from ISO 8601 format to normal format date
+                    var date = new Date(item.start_date)
+                    item.start_date = date.toLocaleString();
 
 
-                //from seconds convert to readable time
-                var elapsed_time = new Date(null);
-                elapsed_time.setSeconds(item.elapsed_time); // specify value for SECONDS here
-                item.elapsed_time = elapsed_time.toISOString().substr(11,8)
+                    //from seconds convert to readable time
+                    var elapsed_time = new Date(null);
+                    elapsed_time.setSeconds(item.elapsed_time); // specify value for SECONDS here
+                    item.elapsed_time = elapsed_time.toISOString().substr(11, 8)
+                })
+                setActivities(data)
+                setFilteredActivities(data)
             })
-            setActivities(data)
-            setFilteredActivities(data)
-        })
     }
-    const filterActivities =()=>{ //search in activities
-        if(filterName.length>0 && filterType=='none'){//filter only by name
+    const filterActivities = () => { //search in activities
+        if (filterName.length > 0 && filterType == 'none') {//filter only by name
             setFilteredActivities([]);
-            activities.map((item,index)=>{
-                if(item.name.toLocaleLowerCase().includes(filterName.toLocaleLowerCase())){
+            activities.map((item, index) => {
+                if (item.name.toLocaleLowerCase().includes(filterName.toLocaleLowerCase())) {
                     setFilteredActivities(filteredActivities => [...filteredActivities, item]);
                     setFilterBool(true)
                 }
             })
         }
-        else if(filterName.length==0 && filterType!='none'){//filter only by type
+        else if (filterName.length == 0 && filterType != 'none') {//filter only by type
             setFilteredActivities([]);
-            activities.map((item,index)=>{
-                if(item.activity_type.toLocaleLowerCase().includes(filterType.toLocaleLowerCase())){
+            activities.map((item, index) => {
+                if (item.activity_type.toLocaleLowerCase().includes(filterType.toLocaleLowerCase())) {
                     setFilteredActivities(filteredActivities => [...filteredActivities, item]);
                     setFilterBool(true)
                 }
             })
         }
-        else if(filterName.length>0 && filterType!='none'){//filter both by name and by type
+        else if (filterName.length > 0 && filterType != 'none') {//filter both by name and by type
             setFilteredActivities([]);
-            activities.map((item,index)=>{
-                if(item.activity_type.toLocaleLowerCase().includes(filterType.toLocaleLowerCase()) && item.name.toLocaleLowerCase().includes(filterName.toLocaleLowerCase())){
+            activities.map((item, index) => {
+                if (item.activity_type.toLocaleLowerCase().includes(filterType.toLocaleLowerCase()) && item.name.toLocaleLowerCase().includes(filterName.toLocaleLowerCase())) {
                     setFilteredActivities(filteredActivities => [...filteredActivities, item]);
                     setFilterBool(true)
                 }
             })
         }
-        else if(filterName.length==0 && filterType=='none'){
+        else if (filterName.length == 0 && filterType == 'none') {
             setFilterBool(false)
             setFilteredActivities(activities)
         }
     }
-    const handleActivityFilterNameChange = (event)=>{
+    const handleActivityFilterNameChange = (event) => {
         setFilterName(event.target.value)
     }
-    const handleActivityFilterTypeChange = (event)=>{
+    const handleActivityFilterTypeChange = (event) => {
         setFilterType(event.target.value)
     }
 
-    const loopAllActivities=()=>{
-        if(filterBool==false){
-            return(
+    const loopAllActivities = () => {
+        if (filterBool == false) {
+            return (
                 <div class="table-responsive">
                     <table class="table table-hover">
                         <thead>
@@ -249,22 +240,22 @@ const Activities = (props) => {
                             </tr>
                         </thead>
                         <tbody>
-                        {activities.length>0? activities.map((item, index) => (
-                            <tr>
-                                <th scope="col">{index+1}</th>
-                                <td>{item.activity_type}</td>
-                                <td><a style={{color:"#00ADAD"}} href={`/activity-details/${item.activity_id}`}>{item.name}</a></td>
-                                <td>{item.start_date_local.slice(0,10)}</td>
-                                <th>{item.elapsed_time}</th>
-                            </tr>
-                            )):<Typography variant="h3">There are no activities</Typography>}
+                            {activities.length > 0 ? activities.map((item, index) => (
+                                <tr>
+                                    <th scope="col">{index + 1}</th>
+                                    <td>{item.activity_type}</td>
+                                    <td><a style={{ color: "#00ADAD" }} href={`/activity-details/${item.activity_id}`}>{item.name}</a></td>
+                                    <td>{item.start_date_local.slice(0, 10)}</td>
+                                    <th>{item.elapsed_time}</th>
+                                </tr>
+                            )) : <Typography variant="h3">There are no activities</Typography>}
                         </tbody>
                     </table>
                 </div>
             )
         }
-        else if(filterBool==true){
-            return(
+        else if (filterBool == true) {
+            return (
                 <div class="table-responsive">
                     <table class="table table-hover">
                         <thead>
@@ -277,37 +268,37 @@ const Activities = (props) => {
                             </tr>
                         </thead>
                         <tbody>
-                        {filteredActivities.length>0? filteredActivities.map((item, index) => (
-                            <tr>
-                                <th scope="col">{index+1}</th>
-                                <td>{item.activity_type}</td>
-                                <td><a style={{color:"#00ADAD"}} href={`/activity-details/${item.activity_id}`}>{item.name}</a></td>
-                                <td>{item.start_date_local.slice(0,10)}</td>
-                                <th>{item.elapsed_time}</th>
-                            </tr>
-                            )):<Typography variant="h3">There are no activities</Typography>}
+                            {filteredActivities.length > 0 ? filteredActivities.map((item, index) => (
+                                <tr>
+                                    <th scope="col">{index + 1}</th>
+                                    <td>{item.activity_type}</td>
+                                    <td><a style={{ color: "#00ADAD" }} href={`/activity-details/${item.activity_id}`}>{item.name}</a></td>
+                                    <td>{item.start_date_local.slice(0, 10)}</td>
+                                    <th>{item.elapsed_time}</th>
+                                </tr>
+                            )) : <Typography variant="h3">There are no activities</Typography>}
                         </tbody>
                     </table>
                 </div>
             )
         }
-        
+
     }
 
 
-    useEffect(()=>{
+    useEffect(() => {
         getStravaActivities()
         authenticateStrava()
-    },[])
+    }, [])
     return (
         <Grid spacing={1} className="all-container">
-            <div style={{paddingTop:50}} className="container">
-                <h2 style={{paddingBottom:30}}>My Strava activities</h2>
+            <div style={{ paddingTop: 50 }} className="container">
+                <h2 style={{ paddingBottom: 30 }}>My Strava activities</h2>
 
                 {/* ACTIVITIES FILTER */}
-                <div style={{marginBottom:50}} class="card">
+                <div style={{ marginBottom: 50 }} class="card">
                     <div class="card-body">
-                        <div style={{paddingBottom:20}}>Filter activities</div>
+                        <div style={{ paddingBottom: 20 }}>Filter activities</div>
                         <div>
                             <div class="row">
                                 <div class="col-6">
@@ -316,15 +307,15 @@ const Activities = (props) => {
                                 <div class="col-6">
                                     <select onChange={handleActivityFilterTypeChange} class="form-select" aria-label="Default select example">
                                         <option value="none">None</option>
-                                        {activity_types.map((item,index)=>{
-                                            return(
+                                        {activity_types.map((item, index) => {
+                                            return (
                                                 <option value={item.value}>{item.label}</option>
                                             )
                                         })}
                                     </select>
                                 </div>
-                                <div style={{paddingTop:20}}>
-                                    <button className="btn" onClick={filterActivities} style={{backgroundColor:"#00ADAD",color:"white"}}>Filter</button>
+                                <div style={{ paddingTop: 20 }}>
+                                    <button className="btn" onClick={filterActivities} style={{ backgroundColor: "#00ADAD", color: "white" }}>Filter</button>
                                 </div>
                             </div>
                         </div>
@@ -334,7 +325,7 @@ const Activities = (props) => {
                 {/* ACTIVITIES TABLE */}
                 {loopAllActivities()}
 
-                <h4 style={{paddingTop:30}}>{filteredActivities.length} Activities</h4>
+                <h4 style={{ paddingTop: 30 }}>{filteredActivities.length} Activities</h4>
 
             </div>
         </Grid>

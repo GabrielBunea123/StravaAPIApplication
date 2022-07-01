@@ -2,8 +2,8 @@ import React from 'react'
 
 const HomeUserFollowers = (props) => {
     return (
-        <div style={{paddingTop:30,paddingBottom:30}} className="d-flex flex-sm-row flex-column bd-highlight mb-3">
-            <div class="card" style={{width:"100%"}}>
+        <div style={{ paddingTop: 30, paddingBottom: 30 }} className="d-flex flex-sm-row flex-column bd-highlight mb-3">
+            <div class="card" style={{ width: "100%" }}>
                 <div class="d-flex flex-sm-row justify-content-between">
                     <div className="home-followers-stats" class="mr-auto p-2">
                         <h5 className="h5-followers">Followers</h5>
